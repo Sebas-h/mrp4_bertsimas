@@ -1,2 +1,4 @@
 .idea/*
-gurobi.log
+.vscode/*
+bertsimas/*
+**/gurobi.log
