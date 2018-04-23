@@ -2,5 +2,5 @@
 .vscode/*
 bertsimas/*
 **/gurobi.log
-**/*.lp
+prototype/*.lp
 
