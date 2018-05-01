@@ -59,6 +59,12 @@ class OCT:
         #to track allocation of points (notation from paper)
         self.l = [] # leaf t contains any point
         self.z = [] # x_i is in node t
+        self.c = [] # label assigned to node t
+        self.c_k_t = [] # label k is assigned to leaf t
+        #objective
+        self.cost_matrix = self.create_cost_matrix() # matrix Y
+        self.N_k_t = []
+        self.N_t = []
         
         self.all_contraints = []        
         self.add_variables()
@@ -66,9 +72,6 @@ class OCT:
         self.set_objective()
         self.add_constraints()
         self.model.update()
-        
-        #objective
-        self.cost_matrix = self.create_cost_matrix() # matrix Y
         
         """print('Variables:')
         print(self.b)
@@ -110,6 +113,14 @@ class OCT:
         for t in self.leaf_nodes:
             self.l.append(self.model.addVar(vtype=gurobipy.GRB.BINARY, name='node_{0}_contains_any_point'.format(t)))
             self.z.append([self.model.addVar(vtype=gurobipy.GRB.BINARY, name='x{0}_is_in_node_{1}'.format(i, t)) for i in range(int(self.n_data_points))])
+            
+            # for objective function
+            self.N_t.append(self.model.addVar(vtype=gurobipy.GRB.INTEGER, name='total_number_of_points_in_{0}'.format(t)))            
+            self.N_k_t.append([self.model.addVar(vtype=gurobipy.GRB.INTEGER, name='number_of_points_of_label_{0}_in_node_{1}'.format(k,t)) for k in range(self.n_classes)])
+            self.c.append(self.model.addVar(vtype=gurobipy.GRB.INTEGER, lb=0, ub=self.n_classes-1, name='label_assigned_to_leaf_{0}'.format(t))) #careful: lb is hardcoded -> classes always need to start from 0
+            self.c_k_t.append([self.model.addVar(vtype=gurobipy.GRB.BINARY, name='label_{0}_is_assigned_to_node_{1}'.format(k,t)) for k in range(self.n_classes)])
+            
+            
     
     def calculate_epsilon(self):
         epsilon = np.array([np.inf]*len(self.not_target_cols))
@@ -152,7 +163,12 @@ class OCT:
                 for m in self.left_ancestors_per_node.get('node_'+str(t)):
                     self.model.addConstr(np.dot(self.a[m-1], x_i+epsilon) <= self.b[m-1] + (1+epsilon_max)*(1-self.z[t_no][i])) # (13)
                 for m in self.right_ancestors_per_node.get('node_'+str(t)):
-                    self.model.addConstr(np.dot(self.a[m-1], x_i) >= self.b[m-1] - (1-self.z[t_no][i]))
+                    self.model.addConstr(np.dot(self.a[m-1], x_i) >= self.b[m-1] - (1-self.z[t_no][i]))            
+            # objective
+            for k in range(self.n_classes):
+                self.model.addConstr(self.N_k_t[t_no][k] == 0.5*sum((1+self.cost_matrix[:,k])*self.z[t_no])) # (15)
+            
+            self.model.addConstr(self.N_t[t_no] == gurobipy.quicksum(self.z[t_no])) # (16)
             
 
     def create_cost_matrix(self):
@@ -183,6 +199,7 @@ class OCT:
     
 
 #%%
+#if __name__=='__main__':
 iris_df = pd.read_csv('iris.data')
 target = 'class'
 tree_complexity = 0.05
@@ -207,3 +224,13 @@ print()
 #print('Cost matrix Y:\n{0}'.format(o.cost_matrix))
 #print()
 o.model.write('oct_example.lp')
+
+#%%
+print(len(iris_df))
+k=0
+y = 1+o.cost_matrix[:,k]
+print(len(y))
+z = [0]*len(y)
+z[0]=1
+
+y*z
