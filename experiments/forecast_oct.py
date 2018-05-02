@@ -11,16 +11,19 @@ import BinTree
 ##################################
 
 # (Hyper) Parameters
-D_max = 3  # maximum depth of the tree
-N_min = 1  # minimum number of data points in leaf node
-alpha = 0.1  # complexity of the tree
-filename = 'data/forecast/forecast.data'
-output_file = 'experiments/forecast.lp'
+D_max = 1  		# maximum depth of the tree
+N_min = 1  		# minimum number of data points in leaf node
+alpha = 0.1  	# complexity of the tree
+filename = 'data/forecast/forecast.data'	# data is read from
+output_file = 'experiments/forecast.lp'		# constraints are written to
+verbose = False	# toggle console output 
 
 
-# temporary
+# temporary 
+# (to be removed once questions regarding split constraints are clarified)
 parenthesis = False
 use_epsilon_min = True
+
 
 ##################################
 # READ AND PREPARE DATA
@@ -110,7 +113,8 @@ for node in branchNodes:
 	if node.parent is not None:
 		constraints.append('d_' + str(node.id) + ' - ' + 'd_' + str(node.parent.id) + ' <= 0' )
 
-	# add b_t generals (Don't add it to generals. Solver will interpret it as ingeter although it's a continuous value)
+	# add b_t generals 
+	# (Don't add it to generals. Solver will interpret it as ingeter although it's a continuous value)
 	#generals.append('b_' + str(node.id)) 
 
 
@@ -288,17 +292,17 @@ for t in branchNodes:
 # CONSOLE OUTPUT
 #####################################
 
+if verbose:
+	print('\-------------')
+	print('\Data: ')
+	print('\-------------')
+	print(norm_df)
 
-print('\-------------')
-print('\Data: ')
-print('\-------------')
-print(norm_df)
-
-print('\-------------')
-print('\Labels: ')
-print('\-------------')
-print(labels)
-print('')
+	print('\-------------')
+	print('\Labels: ')
+	print('\-------------')
+	print(labels)
+	print('')
 
 output = []
 output.append('\-------------')
@@ -330,8 +334,9 @@ generals.sort()
 output.append(' '.join(generals))
 output.append('End')
 
-for o in output:
-	print(o)
+if verbose:
+	for o in output:
+		print(o)
 
 #####################################
 # WRITE LP FILE
@@ -341,3 +346,5 @@ f = open(output_file, 'w')
 for o in output:
 	f.write(o)
 	f.write('\n')
+
+print('LP file created: ' + output_file)

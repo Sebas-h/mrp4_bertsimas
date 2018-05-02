@@ -54,9 +54,6 @@ def generateTree(maxDepth):
 
 	num_nodes = num_branch_nodes + num_leaf_nodes
 
-	print("branch-nodes: ", num_branch_nodes)
-	print("leaf-nodes: ", num_leaf_nodes)
-
 	root = BinTreeNode(False)
 	root = root.expand(maxDepth - 1)
 	return numberingNodes(root)
