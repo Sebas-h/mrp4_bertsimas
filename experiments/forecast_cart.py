@@ -53,7 +53,7 @@ df = df.drop(['play'], axis = 1)
 norm_df = normalize(df)
 
 # fit a CART model to the data
-model = tree.DecisionTreeClassifier(criterion='entropy', max_depth = 2)
+model = tree.DecisionTreeClassifier(criterion='entropy', max_depth = 1)
 model.fit(norm_df, classes)
 
 predicted = model.predict(norm_df)

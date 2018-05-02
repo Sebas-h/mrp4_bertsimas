@@ -16,7 +16,12 @@ D_max = 1  # maximum depth of the tree
 N_min = 1  # minimum number of data points in leaf node
 alpha = 0.1  # complexity of the tree
 filename = 'data/forecast/forecast.data'
+output_file = 'experiments/forecast.lp'
 
+
+# temporary
+parenthesis = False
+use_epsilon_min = True
 
 ##################################
 # READ AND PREPARE DATA
@@ -151,6 +156,7 @@ def calculate_epsilon(df):
 
 epsilon = calculate_epsilon(norm_df)
 epsilon_max = max(epsilon)
+epsilon_min = min(epsilon)
 
 
 # enforcing split constraints:
@@ -167,7 +173,14 @@ for node in leafNodes:
 		for j in range(len(features)):
 			# (9)
 			for ancestor in ancestors_left:
-				left_sum.append( str(norm_df.values[i][j]) + ' ' + 'a_'  + str(j) + '_' + str(ancestor.id) )
+				if parenthesis:
+					left_sum.append( str(norm_df.values[i][j]) + ' a_'  + str(j) + '_' + str(ancestor.id) + ' + ' + str(epsilon[j]) + ' a_'  + str(j) + '_' + str(ancestor.id) )
+				elif use_epsilon_min:
+					# will create constraints using epsilon_min
+					left_sum.append( str(norm_df.values[i][j]) + ' a_'  + str(j) + '_' + str(ancestor.id) )
+				else:
+					# creates a constraint for every feature using epsilon[j]
+					constraints.append( str(norm_df.values[i][j]) + ' a_'  + str(j) + '_' + str(ancestor.id) + ' - b_' + str(ancestor.id) + ' + ' + str(1 + epsilon_max) +  ' z_' + str(i) + '_' + str(node.id)  + ' <= ' + str(1 + epsilon_max - epsilon[j]) )
 
 			# (10)
 			for ancestor in ancestors_right:
@@ -175,7 +188,10 @@ for node in leafNodes:
 		
 		#left 
 		if len(left_sum) > 0:
-			constraints.append( ' + '.join(left_sum) + ' - b_' + str(ancestor.id) + ' + ' + str(1 + epsilon_max) +  ' z_' + str(i) + '_' + str(node.id)  + ' <= ' + str(1 + epsilon_max - epsilon[j]))
+				if parenthesis:
+					constraints.append( ' + '.join(left_sum) + ' - b_' + str(ancestor.id) + ' + ' + str(1 + epsilon_max) +  ' z_' + str(i) + '_' + str(node.id)  + ' <= ' + str(1 + epsilon_max))
+				elif use_epsilon_min:
+					constraints.append( ' + '.join(left_sum) + ' - b_' + str(ancestor.id) + ' + ' + str(1 + epsilon_max) +  ' z_' + str(i) + '_' + str(node.id)  + ' <= ' + str(1 + epsilon_max - epsilon_min))
 
 		#right
 		if len(right_sum) > 0:  
@@ -275,32 +291,46 @@ print('\-------------')
 print('\Labels: ')
 print('\-------------')
 print(labels)
-
-
 print('')
-print('\-------------')
-print('\Objective: ')
-print('\-------------')
-print('Minimize' )
+
+output = []
+output.append('\-------------')
+output.append('\Objective: ')
+output.append('\-------------')
+output.append('Minimize' )
 lts_m = list(map(lambda x: str(1/L_hat) + ' ' + x , lts))
 dts_m = list(map(lambda x: str(alpha) + ' ' + x , dts))
-print( ' + '.join(lts_m) + ' + ' + ' + '.join(dts_m) )
+output.append( ' + '.join(lts_m) + ' + ' + ' + '.join(dts_m) )
 
-print('\-------------')
-print('\Constraints: ')
-print('\-------------')
-print('Subject To' )
+
+output.append('')
+output.append('\-------------')
+output.append('\Constraints: ')
+output.append('\-------------')
+output.append('Subject To' )
 for c in constraints:
-	print(c)
+	output.append(c)
 
-print('')
-print('\-------------')
-print('\Variables: ')
-print('\-------------')
-print('Binaries')
+output.append('')
+output.append('\-------------')
+output.append('\Variables: ')
+output.append('\-------------')
+output.append('Binaries')
 bin_vars.sort()
-print(' '.join(bin_vars))
-print('Generals')
+output.append(' '.join(bin_vars))
+output.append('Generals')
 generals.sort()
-print(' '.join(generals))
-print('End')
+output.append(' '.join(generals))
+output.append('End')
+
+for o in output:
+	print(o)
+
+#####################################
+# WRITE LP FILE
+#####################################
+
+f = open(output_file, 'w')
+for o in output:
+	f.write(o)
+	f.write('\n')
