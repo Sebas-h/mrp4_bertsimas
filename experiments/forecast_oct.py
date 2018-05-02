@@ -10,9 +10,8 @@ import BinTree
 # SET PARAMETER VALUES
 ##################################
 
-# copied from sebas all credits to him
 # (Hyper) Parameters
-D_max = 1  # maximum depth of the tree
+D_max = 3  # maximum depth of the tree
 N_min = 1  # minimum number of data points in leaf node
 alpha = 0.1  # complexity of the tree
 filename = 'data/forecast/forecast.data'
@@ -160,19 +159,19 @@ epsilon_min = min(epsilon)
 
 
 # enforcing split constraints:
+# for each leaf node t
 for node in leafNodes:
 	# get left- and right-splitting ancestors
 	ancestors, ancestors_left, ancestors_right = node.get_ancestors()
 
-	
-	# for each dataset i
-	for i in range(len(norm_df.values)):
-		left_sum = []
-		right_sum = []
-		# for each feature j
-		for j in range(len(features)):
-			# (9)
-			for ancestor in ancestors_left:
+	# for each left ancestor m (in A_L)
+	for ancestor in ancestors_left:
+
+		# for each datapoint i
+		for i in range(len(norm_df.values)):
+			left_sum = []
+			# for each feature j
+			for j in range(len(features)):
 				if parenthesis:
 					left_sum.append( str(norm_df.values[i][j]) + ' a_'  + str(j) + '_' + str(ancestor.id) + ' + ' + str(epsilon[j]) + ' a_'  + str(j) + '_' + str(ancestor.id) )
 				elif use_epsilon_min:
@@ -181,21 +180,27 @@ for node in leafNodes:
 				else:
 					# creates a constraint for every feature using epsilon[j]
 					constraints.append( str(norm_df.values[i][j]) + ' a_'  + str(j) + '_' + str(ancestor.id) + ' - b_' + str(ancestor.id) + ' + ' + str(1 + epsilon_max) +  ' z_' + str(i) + '_' + str(node.id)  + ' <= ' + str(1 + epsilon_max - epsilon[j]) )
-
-			# (10)
-			for ancestor in ancestors_right:
-				right_sum.append( str(norm_df.values[i][j]) + ' ' + 'a_'  + str(j) + '_' + str(ancestor.id) )
-		
-		#left 
-		if len(left_sum) > 0:
+			
+			if len(left_sum) > 0:
 				if parenthesis:
 					constraints.append( ' + '.join(left_sum) + ' - b_' + str(ancestor.id) + ' + ' + str(1 + epsilon_max) +  ' z_' + str(i) + '_' + str(node.id)  + ' <= ' + str(1 + epsilon_max))
 				elif use_epsilon_min:
 					constraints.append( ' + '.join(left_sum) + ' - b_' + str(ancestor.id) + ' + ' + str(1 + epsilon_max) +  ' z_' + str(i) + '_' + str(node.id)  + ' <= ' + str(1 + epsilon_max - epsilon_min))
 
-		#right
-		if len(right_sum) > 0:  
-			constraints.append( ' + '.join(right_sum) + ' - b_' + str(ancestor.id) + ' - z_' + str(i) + '_' + str(node.id) + ' >= -1' )
+
+	# for each right ancestor m (in A_R)
+	for ancestor in ancestors_right:
+
+		# for each datapoint i
+		for i in range(len(norm_df.values)):
+			right_sum = []
+			# for each feature j
+			for j in range(len(features)):
+				# (10)
+				right_sum.append( str(norm_df.values[i][j]) + ' ' + 'a_'  + str(j) + '_' + str(ancestor.id) )
+
+			if len(right_sum) > 0:  
+				constraints.append( ' + '.join(right_sum) + ' - b_' + str(ancestor.id) + ' - z_' + str(i) + '_' + str(node.id) + ' >= -1' )
 
 
 
@@ -271,6 +276,8 @@ L_hat = majority_class_count / len(labels.values)
 lts = []
 for t in leafNodes:
 	lts.append('L_' + str(t.id))
+	generals.append('L_' + str(t.id))
+
 dts = []
 for t in branchNodes:
 	dts.append('d_' + str(t.id))
