@@ -236,7 +236,7 @@ class OCT:
         """
         Y = np.ones((len(self.data), self.n_classes))*-1
         for row_no, row in enumerate(Y):
-            c = self.data.iloc[row_no,:][self.target_trans]
+            c = int(self.data.iloc[row_no,:][self.target_trans])
             row[c] = 1
         return Y
 
@@ -252,17 +252,19 @@ class OCT:
 
 #%%
 if __name__=='__main__':
-    #target = 'class' #for iris
-    #iris_df = pd.read_csv('iris.data')
-    #norm_cols = [col for col in iris_df.columns if not col==target]
-    #iris_df.head()
-    #Preprocessing.normalize(iris_df, norm_cols=norm_cols)
-    #iris_df.head()
-    filename = '../data/forecast/forecast.data'
-    df = pd.read_csv(filename)
-    target='play'
-    Preprocessing.categorical_to_numerical(df)
-    Preprocessing.boolean_to_numerical(df)
+    target = 'class' #for iris
+    df = pd.read_csv('iris.data')
+    norm_cols = [col for col in df.columns if not col==target]
+    
+    #filename = '../data/forecast/forecast.data'
+    #df = pd.read_csv(filename)
+    #target='play'
+    norm_cols = [col for col in df.columns if not col==target]
+    print(norm_cols)
+    #Preprocessing.categorical_to_numerical(df)
+    #Preprocessing.boolean_to_numerical(df)
+    Preprocessing.normalize(df, norm_cols=norm_cols)
+    print(df.head())
     #%%
     
     #%%
@@ -290,6 +292,7 @@ if __name__=='__main__':
     o.model.write('oct_example.lp')
     #%%
     o.model.optimize()
+    o.model.write('oct.sol')
     #%%
     print('*'*10)
     print('SOLUTION')
