@@ -252,19 +252,23 @@ class OCT:
 
 #%%
 if __name__=='__main__':
-    target = 'class'
-    iris_df = pd.read_csv('iris.data')
-    norm_cols = [col for col in iris_df.columns if not col==target]
-    iris_df.head()
-    #%%
-    Preprocessing.normalize(iris_df, norm_cols=norm_cols)
-    iris_df.head()
+    #target = 'class' #for iris
+    #iris_df = pd.read_csv('iris.data')
+    #norm_cols = [col for col in iris_df.columns if not col==target]
+    #iris_df.head()
+    #Preprocessing.normalize(iris_df, norm_cols=norm_cols)
+    #iris_df.head()
+    filename = '../data/forecast/forecast.data'
+    df = pd.read_csv(filename)
+    target='play'
+    Preprocessing.categorical_to_numerical(df)
+    Preprocessing.boolean_to_numerical(df)
     #%%
     
     #%%
     tree_complexity = 0.05
     tree_depth = 3
-    o = OCT(iris_df, target, tree_complexity, tree_depth)
+    o = OCT(df, target, tree_complexity, tree_depth)
     #print('Number of independent variables: {0}'.format(o.n_independent_var))
     #print()
     #print('Baseline: {0}\nN_min: {1}'.format(o.norm_constant, o.min_number_node))
