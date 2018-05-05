@@ -1,6 +1,7 @@
 import gurobipy
 import pandas as pd
 import numpy as np
+from classification_tree import BinClassificationTree
 from handy import Preprocessing
 
 """
@@ -68,8 +69,9 @@ class OCT:
         self.N_t = [] #total number of points in node t
         self.L_hat = self._get_baseline_accuracy() #TODO: safety check (=0?)
         self.L_t = [] # missclassification error
+        self.tree = None
         
-        self.all_contraints = []        
+        #self.all_contraints = []        
         self.add_variables()
         self.model.update()
         self.set_objective()
@@ -82,7 +84,7 @@ class OCT:
  
     def all_ancestors(self, node):
         """
-        returns list off all ancestors of node node
+        returns list of all ancestors of node node
         """
         ancestors = []
         while node>1:
@@ -104,7 +106,6 @@ class OCT:
             if ancestor*2==node:
                 left_ancestors.append(ancestor)
             node = ancestor
-        print()
         return left_ancestors
         #return [a for a in self.all_ancestors_per_node['node_'+str(node)] if a%2==0]
     
@@ -195,6 +196,7 @@ class OCT:
         #epsilon
         epsilon = self.calculate_epsilon()
         epsilon_max=np.max(epsilon)
+        epsilon_min = np.min(epsilon)
         
         for t_no, t in enumerate(self.leaf_nodes):
             for i in range(int(self.n_data_points)):
@@ -203,11 +205,16 @@ class OCT:
                 #split constraints following formulation in paper
                 #for m in self.left_ancestors_per_node.get('node_'+str(t)):
                 #    self.model.addConstr(np.dot(self.a[m-1], x_i+epsilon) <= self.b[m-1] + (1+epsilon_max)*(1-self.z[t_no][i])) # (13)
-                                
+                
+                #adding epsilon_min and remove parenthesis
+                for m in self.left_ancestors_per_node.get('node_'+str(t)):
+                    self.model.addConstr(np.dot(self.a[m-1], x_i)+epsilon_min <= self.b[m-1] + (1+epsilon_max)*(1-self.z[t_no][i])) # (13)
+                
+                    
                 #adding split criterion per feature
-                for feat_no, feat in enumerate(x_i):
-                    for m in self.left_ancestors_per_node.get('node_'+str(t)):
-                        self.model.addConstr(self.a[m-1][feat_no]*x_i[feat_no]+epsilon[feat_no] <= self.b[m-1] + (1+epsilon_max)*(1-self.z[t_no][i]))
+                #for feat_no, feat in enumerate(x_i):
+                #    for m in self.left_ancestors_per_node.get('node_'+str(t)):
+                #        self.model.addConstr(self.a[m-1][feat_no]*x_i[feat_no]+epsilon[feat_no] <= self.b[m-1] + (1+epsilon_max)*(1-self.z[t_no][i]))
                 
                 for m in self.right_ancestors_per_node.get('node_'+str(t)):
                     self.model.addConstr(np.dot(self.a[m-1], x_i) >= self.b[m-1] - (1-self.z[t_no][i])) #(14)
@@ -244,8 +251,31 @@ class OCT:
         self.model.setObjective((1.0/self.L_hat)*gurobipy.quicksum(self.L_t) + self.tree_complexity*gurobipy.quicksum(self.d))                
         
     def fit(self):
+        self.model.optimize() #TODO: add paramaters like max time, cores, ...
+        self.create_tree() # create classification tree
+    
+    def create_tree(self):
+        """
+        """
+        #model_vars = self.model.getVars()
+        self.tree = BinClassificationTree(n_total_nodes=self.tree_max_nodes, model=self.model, n_total_classes=self.n_classes, n_features=self.n_independent_var)
         return
+    
+    def predict(self, df, feat_cols):
+        return self.tree.predict(df, cols=feat_cols)
+    
+    def training_accuracy(self):
+        training_preds = self.predict(self.data, feat_cols=self.not_target_cols)
+        actual = self.data[self.target_trans].values
+        return sum([1 for i in range(len(training_preds)) if training_preds[i]==actual[i]])/len(actual)
+    
+    def accuracy_on_test(self, df, target):
+        predictions = self.predict(df, feat_cols=self.not_target_cols)
+        preds_translated = [self.number_to_class.get(pred) for pred in predictions] #translate back to original labels
+        actual = df[target].values
+        return sum([1 for i in range(len(preds_translated)) if preds_translated[i]==actual[i]])/len(actual)
         
+    
     def _get_baseline_accuracy(self):
         return (np.sort(self.data.groupby(by=target).count().iloc[0,:].values)[-1])/self.n_data_points
     
@@ -270,7 +300,10 @@ if __name__=='__main__':
     #%%
     tree_complexity = 0.05
     tree_depth = 3
-    o = OCT(df, target, tree_complexity, tree_depth)
+    df_train, df_test = Preprocessing.train_test_split(df, split=0.8)
+    print('Training samples: {0}'.format(len(df_train)))
+    print('Testing samples: {0}'.format(len(df_test)))
+    o = OCT(df_train, target, tree_complexity, tree_depth)
     #print('Number of independent variables: {0}'.format(o.n_independent_var))
     #print()
     #print('Baseline: {0}\nN_min: {1}'.format(o.norm_constant, o.min_number_node))
@@ -291,12 +324,23 @@ if __name__=='__main__':
     #print()
     o.model.write('oct_example.lp')
     #%%
-    o.model.optimize()
+    o.fit()
     o.model.write('oct.sol')
     #%%
     print('*'*10)
     print('SOLUTION')
     print('*'*10)
-    v = o.model.getVars()
-    for var in v:
-        print(var.varName, ': ', var.x)
+    v = o.model.getVarByName('label_0_is_assigned_to_node_2')
+    #for var in v:
+    #%%
+    print(o.tree)
+    preds = o.predict(df, feat_cols=norm_cols)
+    #for node in o.tree.tree.keys():
+    #    print(o.tree.tree.get(node).get('node_data'))
+    #    print(var.varName, ': ', var.x)
+    #%%
+    #for pred_no, pred in enumerate(preds):
+    #    print('prediction for x{0}: label {1}'.format(pred_no, pred))
+    print('Training accuracy: {0}'.format(o.training_accuracy()))
+    print('Testing accuracy: {0}'.format(o.accuracy_on_test(df_test,target)))
+    

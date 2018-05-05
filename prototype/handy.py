@@ -34,4 +34,11 @@ class Preprocessing:
         bool_cols = df.dtypes.pipe(lambda x: x[x == bool_type]).index
         for c in bool_cols:
             df[c] = df[c].astype(int)
+    
+    def train_test_split(df, split=0.8):
+        train=df.sample(frac=split,random_state=200)
+        test=df.drop(train.index)
+        
+        return train, test
+        
         
