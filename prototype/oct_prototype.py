@@ -17,6 +17,8 @@ class OCT:
     
     def __init__(self, data, target, tree_complexity, tree_depth):
         """
+        #TODO: Idea: feed in training data and target data separately
+        
         data = pandas dataframe holding data
         target = column name of target variable (string) #TODO: also implement integer (col number)
         """
@@ -24,10 +26,13 @@ class OCT:
         self.model = gurobipy.Model()
         
         self.data = data
-        self.target_var = target
-        self.not_target_cols = [col for col in self.data.columns if not col==target]
+        if isinstance(target, str):
+            self.target_var = target
+        if isinstance(target, int):
+            self.target_var = self.data.columns[target]
+        self.not_target_cols = [col for col in self.data.columns if not col==self.target_var]
         self.tree_complexity = tree_complexity # alpha
-        self.tree_depth = tree_depth # D
+        self.tree_depth = tree_depth+1 # D
         self.n_data_points = len(self.data)*1.0 #total number of training points
         self.norm_constant = self._get_baseline_accuracy() #L hat
         self.min_number_node = int(self.n_data_points*0.05)*1.0 #N_min
@@ -250,8 +255,15 @@ class OCT:
     def set_objective(self):
         self.model.setObjective((1.0/self.L_hat)*gurobipy.quicksum(self.L_t) + self.tree_complexity*gurobipy.quicksum(self.d))                
         
-    def fit(self):
-        self.model.optimize() #TODO: add paramaters like max time, cores, ...
+    def fit(self, time_limit=300, threads=None):
+        """
+        time_limit: maximum time in seconds for running gurobi optimization
+        threads: how many threads to use, if set to None, gurobi default
+        """
+        self.model.Params.timeLimit = time_limit
+        if not threads is None:
+            self.model.Params.Threads = threads
+        self.model.optimize() #TODO: add stop criterion: if gap hadn't changed for x seconds, then abort
         self.create_tree() # create classification tree
     
     def create_tree(self):
@@ -272,24 +284,26 @@ class OCT:
     def accuracy_on_test(self, df, target):
         predictions = self.predict(df, feat_cols=self.not_target_cols)
         preds_translated = [self.number_to_class.get(pred) for pred in predictions] #translate back to original labels
-        actual = df[target].values
+        actual = df[self.target_var].values
         return sum([1 for i in range(len(preds_translated)) if preds_translated[i]==actual[i]])/len(actual)
         
     
     def _get_baseline_accuracy(self):
-        return (np.sort(self.data.groupby(by=target).count().iloc[0,:].values)[-1])/self.n_data_points
+        return (np.sort(self.data.groupby(by=self.target_var).count().iloc[0,:].values)[-1])/self.n_data_points
     
 
 #%%
 if __name__=='__main__':
-    target = 'class' #for iris
+    #target = 'class' #for iris
+    target = 4
     df = pd.read_csv('iris.data')
-    norm_cols = [col for col in df.columns if not col==target]
+    target_name = df.columns[target]
+    print(target_name)
+    norm_cols = [col for col in df.columns if not col==target_name]
     
     #filename = '../data/forecast/forecast.data'
     #df = pd.read_csv(filename)
     #target='play'
-    norm_cols = [col for col in df.columns if not col==target]
     print(norm_cols)
     #Preprocessing.categorical_to_numerical(df)
     #Preprocessing.boolean_to_numerical(df)
@@ -299,7 +313,7 @@ if __name__=='__main__':
     
     #%%
     tree_complexity = 0.05
-    tree_depth = 3
+    tree_depth = 1
     df_train, df_test = Preprocessing.train_test_split(df, split=0.8)
     print('Training samples: {0}'.format(len(df_train)))
     print('Testing samples: {0}'.format(len(df_test)))
@@ -330,7 +344,7 @@ if __name__=='__main__':
     print('*'*10)
     print('SOLUTION')
     print('*'*10)
-    v = o.model.getVarByName('label_0_is_assigned_to_node_2')
+    #v = o.model.getVarByName('label_0_is_assigned_to_node_2')
     #for var in v:
     #%%
     print(o.tree)
@@ -343,4 +357,5 @@ if __name__=='__main__':
     #    print('prediction for x{0}: label {1}'.format(pred_no, pred))
     print('Training accuracy: {0}'.format(o.training_accuracy()))
     print('Testing accuracy: {0}'.format(o.accuracy_on_test(df_test,target)))
-    
+    #%%
+    o.model.MIPGap
