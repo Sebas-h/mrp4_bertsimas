@@ -5,7 +5,19 @@ from sklearn import metrics
 from sklearn import tree
 
 
+##################################
+# SET PARAMETER VALUES
+##################################
+
+# (Hyper) Parameters
+D_max = 3  # maximum depth of the tree
 filename = 'data/forecast/forecast.data'
+
+
+##################################
+# READ AND PREPARE DATA
+##################################
+
 df = pd.read_csv(filename)
 
 # print(df.dtypes)
@@ -53,7 +65,7 @@ df = df.drop(['play'], axis = 1)
 norm_df = normalize(df)
 
 # fit a CART model to the data
-model = tree.DecisionTreeClassifier(criterion='entropy', max_depth = 2)
+model = tree.DecisionTreeClassifier(criterion='entropy', max_depth = D_max)
 model.fit(norm_df, classes)
 
 predicted = model.predict(norm_df)

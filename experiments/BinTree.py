@@ -26,6 +26,20 @@ class BinTreeNode:
             return []
         return [self.child_right, self.child_left]
 
+    def get_ancestors(self):
+        ancestors = []
+        ancestors_left = []
+        ancestors_right = []
+        currentNode = self
+        while currentNode.parent is not None:
+            ancestors.append(currentNode.parent)
+            if currentNode.parent.child_left == currentNode:
+                ancestors_left.append(currentNode.parent)
+            else:
+                ancestors_right.append(currentNode.parent)
+            currentNode = currentNode.parent
+        return ancestors, ancestors_left, ancestors_right
+         
 
 def generateTree(maxDepth):
 	assert maxDepth > 0
@@ -39,9 +53,6 @@ def generateTree(maxDepth):
 	num_leaf_nodes = 2 ** maxDepth
 
 	num_nodes = num_branch_nodes + num_leaf_nodes
-
-	print("branch-nodes: ", num_branch_nodes)
-	print("leaf-nodes: ", num_leaf_nodes)
 
 	root = BinTreeNode(False)
 	root = root.expand(maxDepth - 1)
