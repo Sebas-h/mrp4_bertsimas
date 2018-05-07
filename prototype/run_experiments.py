@@ -6,7 +6,7 @@ from oct_prototype import OCT
 from datetime import datetime as dt
 import os
 
-def uci_experiment(url, target_col, tree_depths, alphas, repeat, train_test_ratio=0.8, header=None, max_time_per_run=300, threads=None, save_to_file=True, dataset_name=None, character_encoding='utf-8'):
+def uci_experiment(url, target_col, tree_depths, alphas, repeat, train_test_ratio=0.8, header=None, max_time_per_run=300, threads=None, save_to_file=True, print_status=False, dataset_name=None, character_encoding='utf-8'):
     """
     TODO: currently only numerical datasets are supported (preprocessing needs to be adjusted)
         input checks need to be added
@@ -64,9 +64,9 @@ def uci_experiment(url, target_col, tree_depths, alphas, repeat, train_test_rati
                 
                 #normalize
                 target_col_name = df.columns[target_col]
-                print(target_col_name)
+                #print(target_col_name)
                 norm_cols = [col for col in df.columns if not col==target_col_name]
-                print(norm_cols)
+                #print(norm_cols)
                 Preprocessing.normalize(train_df, norm_cols=norm_cols)
                 Preprocessing.normalize(test_df, norm_cols=norm_cols)
                 
@@ -93,6 +93,17 @@ def uci_experiment(url, target_col, tree_depths, alphas, repeat, train_test_rati
                 stats_trees.append(str(o.tree))
                 stats_training_accuracies.append(o.training_accuracy())
                 stats_testing_accuracies.append(o.accuracy_on_test(test_df, target_col))
+                
+                if print_status:
+                    print('Training parameters: alpha={0}, tree depth={1}\nBaseline accuracy: {2}'.format(alpha, tree_depth, stats_baseline_accuracies[-1]))
+                    print('Number of training instances: {0}'.format(stats_training_instances[-1]))
+                    print('Number of testing instances: {0}'.format(stats_testing_instances[-1]))
+                    print('Total training time: {0}.'.format(stats_training_times[-1]))
+                    print('Gap: {0}'.format(stats_gaps[-1]))
+                    print('Final objective value: {0}'.format(stats_objective_values[-1]))
+                    print('Accuracy on training set: {0}'.format(stats_training_accuracies[-1]))
+                    print('Accuracy on testing set: {0}'.format(stats_testing_accuracies[-1]))
+                    print('Resulting tree: {0}'.format(stats_trees[-1]))
     
     results_df = pd.DataFrame({'data_source':stats_data_urls,
                                'number_of_classes': stats_n_classes,
@@ -122,21 +133,24 @@ def uci_experiment(url, target_col, tree_depths, alphas, repeat, train_test_rati
             file_name=dataset_name+'_'+date_string+'.csv'
         
         path = dir_name+'/'+file_name
-        print(path)
+        print('Results saved to: {0}'.format(path))
         results_df.to_csv(path)
     
     return results_df
 
 if __name__=='__main__':
-    #target_col = 4#iris
-    target_col=9#fertility diagnosis
-    tree_depths=[1]
-    alphas=[0.05, 0.1]
-    repeat=2
-    #url='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
-    url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
-    #dataset_name = 'iris'
-    dataset_name = 'fertility_diagnosis'
-    results = uci_experiment(url, target_col, tree_depths, alphas, repeat, dataset_name=dataset_name)
+    target_col = 4#iris
+    #target_col=9#fertility diagnosis
+    tree_depths=[1,2,3,4]
+    alphas=[0.05]
+    repeat=1
+    threads = 2
+    max_time_per_run = 900 #seconds
+    url='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
+    #url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
+    dataset_name = 'iris'
+    #dataset_name = 'fertility_diagnosis'
+    print_status = True
+    results = uci_experiment(url, target_col, tree_depths, alphas, repeat, dataset_name=dataset_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status)
     #print(results)
     #%%
