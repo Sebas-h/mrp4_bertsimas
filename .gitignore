@@ -3,4 +3,7 @@
 bertsimas/*
 **/gurobi.log
 prototype/*.lp
+prototype/*.sol
+prototype/experiments/
+**/__pycache__
 
