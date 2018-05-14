@@ -6,7 +6,7 @@ from oct_prototype import OCT
 from datetime import datetime as dt
 import os
 
-def uci_experiment(url, target_col, tree_depths, alphas, repeat, train_test_ratio=0.8, header=None, max_time_per_run=300, threads=None, save_to_file=True, print_status=False, dataset_name=None, character_encoding='utf-8'):
+def uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat, train_test_ratio=0.8, header=None, max_time_per_run=300, threads=None, save_to_file=True, print_status=False, f_name=None, character_encoding='utf-8'):
     """
     TODO: currently only numerical datasets are supported (preprocessing needs to be adjusted)
         input checks need to be added
@@ -46,6 +46,10 @@ def uci_experiment(url, target_col, tree_depths, alphas, repeat, train_test_rati
     html = requests.get(url).content
     s = io.StringIO(html.decode(character_encoding))
     df = pd.read_csv(s, header=header)
+    
+    #hot encode if needed
+    if not hot_encode_cols is None:
+        df, target_col = Preprocessing.hot_encode(df, target_col, hot_encode_cols)
     
     for alpha in alphas:
         for tree_depth in tree_depths:
@@ -104,7 +108,7 @@ def uci_experiment(url, target_col, tree_depths, alphas, repeat, train_test_rati
                     print('Accuracy on training set: {0}'.format(stats_training_accuracies[-1]))
                     print('Accuracy on testing set: {0}'.format(stats_testing_accuracies[-1]))
                     print('Resulting tree: {0}'.format(stats_trees[-1]))
-    
+        
     results_df = pd.DataFrame({'data_source':stats_data_urls,
                                'number_of_classes': stats_n_classes,
                                'number of features': stats_n_features,
@@ -127,10 +131,10 @@ def uci_experiment(url, target_col, tree_depths, alphas, repeat, train_test_rati
             os.makedirs(dir_name)
         
         date_string = dt.now().strftime('%Y-%b-%d-%H:%M:%S')
-        if not isinstance(dataset_name, str):
+        if not isinstance(f_name, str):
             file_name = date_string+'.csv'
         else:
-            file_name=dataset_name+'_'+date_string+'.csv'
+            file_name=f_name+'_'+date_string+'.csv'
         
         path = dir_name+'/'+file_name
         print('Results saved to: {0}'.format(path))
@@ -141,16 +145,21 @@ def uci_experiment(url, target_col, tree_depths, alphas, repeat, train_test_rati
 if __name__=='__main__':
     target_col = 4#iris
     #target_col=9#fertility diagnosis
-    tree_depths=[1,2,3,4]
-    alphas=[0.05]
+    #target_col=0 #balance-scale
+    tree_depths=[2]
+    alphas=[0.5, 1, 2, 5, 8]
     repeat=1
     threads = 2
-    max_time_per_run = 900 #seconds
+    max_time_per_run = 600 #seconds
     url='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
     #url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
-    dataset_name = 'iris'
-    #dataset_name = 'fertility_diagnosis'
+    #url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data'
+    f_name = 'iris'
+    #f_name = 'balance-scale'
+    hot_encode_cols = None #iris, fertility
+    #hot_encode_cols = [1,2,3,4]
+    #f_name = 'fertility_diagnosis'
     print_status = True
-    results = uci_experiment(url, target_col, tree_depths, alphas, repeat, dataset_name=dataset_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status)
+    results = uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat, f_name=f_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status)
     #print(results)
     #%%

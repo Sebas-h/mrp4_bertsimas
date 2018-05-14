@@ -289,7 +289,7 @@ class OCT:
         
     
     def _get_baseline_accuracy(self):
-        return (np.sort(self.data.groupby(by=self.target_var).count().iloc[0,:].values)[-1])/self.n_data_points
+        return np.max((np.unique(self.data.groupby(by=self.target_var).count().iloc[:,:].values)[-1]))/self.n_data_points
     
 
 #%%

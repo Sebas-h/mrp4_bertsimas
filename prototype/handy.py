@@ -15,7 +15,17 @@ class Preprocessing:
             
         scaled_values = scaler.fit_transform(df[norm_cols])
         df.loc[:,:][norm_cols] = scaled_values
+    
+    def hot_encode(df, target_col, columns):
         
+        
+        hot_encoded_df = pd.get_dummies(df, columns=columns)
+        
+        all_cols = list(hot_encoded_df.columns)
+        hot_target = all_cols.index(target_col)       
+        
+        return hot_encoded_df, hot_target
+    
     def categorical_to_numerical(df, categorical_type='object'):
         """
         converts categorical values to numerical values inplace (no return)
@@ -41,4 +51,26 @@ class Preprocessing:
         
         return train, test
         
-        
+#%%
+"""
+import pandas as pd
+import numpy as np
+df = pd.read_csv('balance-scale.data', header=None)
+df.head()   
+#%%
+target_col = 0
+cols = [1,2,3,4]
+hot_encoded = pd.get_dummies(df, columns=cols)
+#%%
+all_cols = list(hot_encoded.columns)
+print(all_cols)
+#%%
+target_col = all_cols.index(target_col)
+#%%
+hot_encoded[target_col]
+#%%
+(np.sort(hot_encoded.groupby(by=target_col).count().iloc[0,:].values)[-1])/len(hot_encoded)
+#%%
+np.max(np.unique(hot_encoded.groupby(by=target_col).count().iloc[:,:].values))/len(hot_encoded)
+#%%
+49/625"""
