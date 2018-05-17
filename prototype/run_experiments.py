@@ -130,7 +130,7 @@ def uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)
         
-        date_string = dt.now().strftime('%Y-%b-%d-%H:%M:%S')
+        date_string = dt.now().strftime('%Y-%b-%d-%H-%M-%S')
         if not isinstance(f_name, str):
             file_name = date_string+'.csv'
         else:
@@ -143,23 +143,24 @@ def uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat
     return results_df
 
 if __name__=='__main__':
-    target_col = 4#iris
-    #target_col=9#fertility diagnosis
+    #target_col = 4#iris
+    target_col=9#fertility diagnosis
     #target_col=0 #balance-scale
+    train_test_ratio = 0.75
     tree_depths=[2]
-    alphas=[0.5, 1, 2, 5, 8]
-    repeat=1
+    alphas=[0.5, 1, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8]
+    repeat=3
     threads = 2
     max_time_per_run = 600 #seconds
-    url='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
-    #url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
+    #url='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
+    url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
     #url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data'
-    f_name = 'iris'
+    #f_name = 'iris'
     #f_name = 'balance-scale'
     hot_encode_cols = None #iris, fertility
     #hot_encode_cols = [1,2,3,4]
-    #f_name = 'fertility_diagnosis'
+    f_name = 'fertility_diagnosis'
     print_status = True
-    results = uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat, f_name=f_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status)
+    results = uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat, train_test_ratio=train_test_ratio, f_name=f_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status)
     #print(results)
     #%%
