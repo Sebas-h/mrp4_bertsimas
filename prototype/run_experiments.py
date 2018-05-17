@@ -130,7 +130,8 @@ def uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)
         
-        date_string = dt.now().strftime('%Y-%b-%d-%H-%M-%S')
+        date_string = dt.now().strftime('%Y-%b-%d_%H-%M-%S')
+
         if not isinstance(f_name, str):
             file_name = date_string+'.csv'
         else:
