@@ -289,7 +289,9 @@ class OCT:
         
     
     def _get_baseline_accuracy(self):
+        #return np.max((np.unique(self.data.groupby(by=self.target_var).count().iloc[:,:].values)[-1])) #count of points of most frequent label
         return np.max((np.unique(self.data.groupby(by=self.target_var).count().iloc[:,:].values)[-1]))/self.n_data_points
+        #return 1.0/(np.max((np.unique(self.data.groupby(by=self.target_var).count().iloc[:,:].values)[-1]))/self.n_data_points) # don't divide in objective
     
 
 #%%

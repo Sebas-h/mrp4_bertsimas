@@ -1,0 +1,1156 @@
+,alpha,baseline_accuracy,data_source,gap,number of features,number_of_classes,objective_value,testing_accuracy,testing_instances,training_accuracy,training_instances,training_time_sec,tree,tree_depth
+0,0.0,0.3392857142857143,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,11.789473684210526,0.9473684210526315,38,0.9642857142857143,112,22.378731,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.6842105263157894
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.17543859649122792
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.7368421052631576
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+1,0.0,0.4017857142857143,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,12.444444444444445,0.9736842105263158,38,0.8928571428571429,112,20.17212,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.39254385964912164
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.3750000000000051
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.6842105263157894
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+2,0.0,0.375,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,13.333333333333332,0.9736842105263158,38,0.9553571428571429,112,36.12735,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.6666666666666662
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.2258771929824507
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.6842105263157999
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+3,0.5,0.3482142857142857,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,9.615384615384615,0.9473684210526315,38,0.9732142857142857,112,15.40568,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.6727272727272728
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.22651515151515172
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+4,0.5,0.3482142857142857,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,15.35897435897436,0.9736842105263158,38,0.8839285714285714,112,36.126414,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.375
+*****
+node_2
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.7083333333333339
+*****
+node_4
+Leaf Node: True 
+label: None
+*****
+node_5
+Leaf Node: True 
+label: 0
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+5,0.5,0.36607142857142855,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,14.658536585365855,0.7631578947368421,38,0.9464285714285714,112,22.991702,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.33898305084745783
+*****
+node_2
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.6610169491525423
+*****
+node_4
+Leaf Node: True 
+label: None
+*****
+node_5
+Leaf Node: True 
+label: 0
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+6,1.0,0.35714285714285715,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,13.2,0.8157894736842105,38,0.9464285714285714,112,29.012056,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.37499999999999956
+*****
+node_2
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.7017543859649124
+*****
+node_4
+Leaf Node: True 
+label: None
+*****
+node_5
+Leaf Node: True 
+label: 0
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+7,1.0,0.3392857142857143,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,19.684210526315788,1.0,38,0.9464285714285714,112,80.763334,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.6551724137931034
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.375
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+8,1.0,0.36607142857142855,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,12.926829268292684,0.9736842105263158,38,0.9642857142857143,112,132.636339,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.6836158192090396
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.22528248587570648
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+9,1.5,0.375,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,16.333333333333332,0.9736842105263158,38,0.9553571428571429,112,30.896948,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.6779661016949147
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.3389830508474576
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+10,1.5,0.3392857142857143,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,14.789473684210526,0.9736842105263158,38,0.9642857142857143,112,194.125635,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.6842105263157892
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.1754385964912284
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+11,1.5,0.36607142857142855,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,13.926829268292684,0.9473684210526315,38,0.9642857142857143,112,24.42608,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.3749999999999999
+*****
+node_2
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.6836158192090402
+*****
+node_4
+Leaf Node: True 
+label: None
+*****
+node_5
+Leaf Node: True 
+label: 0
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+12,2.0,0.36607142857142855,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,12.195121951219512,0.9210526315789473,38,0.9732142857142857,112,14.581662,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.35087719298245523
+*****
+node_2
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.6666666666666646
+*****
+node_4
+Leaf Node: True 
+label: None
+*****
+node_5
+Leaf Node: True 
+label: 0
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+13,2.0,0.36607142857142855,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,14.926829268292684,0.9473684210526315,38,0.9642857142857143,112,22.322977,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.338983050847457
+*****
+node_2
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.6836158192090394
+*****
+node_4
+Leaf Node: True 
+label: None
+*****
+node_5
+Leaf Node: True 
+label: 0
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+14,2.0,0.3482142857142857,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,18.358974358974358,0.9736842105263158,38,0.9553571428571429,112,82.065801,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.6419491525423745
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.16949152542372914
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+15,2.5,0.375,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,15.666666666666664,0.8421052631578947,38,0.9553571428571429,112,32.690347,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.696428571428784
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.4107142857142856
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+16,2.5,0.375,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,13.0,0.9210526315789473,38,0.9732142857142857,112,15.260925,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.375
+*****
+node_2
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.6419491525423743
+*****
+node_4
+Leaf Node: True 
+label: None
+*****
+node_5
+Leaf Node: True 
+label: 0
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+17,2.5,0.35714285714285715,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,16.2,0.9473684210526315,38,0.9642857142857143,112,170.800001,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.641949152542373
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.16949152542372917
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+18,3.0,0.3482142857142857,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,20.358974358974358,0.8947368421052632,38,0.9375,112,52.806366,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.3275862068965516
+*****
+node_2
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.6551724137931049
+*****
+node_4
+Leaf Node: True 
+label: None
+*****
+node_5
+Leaf Node: True 
+label: 0
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+19,3.0,0.3482142857142857,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,17.48717948717949,0.9473684210526315,38,0.9642857142857143,112,20.285081,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.3389830508474574
+*****
+node_2
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.6419491525423745
+*****
+node_4
+Leaf Node: True 
+label: None
+*****
+node_5
+Leaf Node: True 
+label: 0
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+20,3.0,0.3482142857142857,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,17.48717948717949,0.9473684210526315,38,0.9642857142857143,112,28.485784,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.6836158192090394
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.3389830508474574
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+21,3.5,0.3392857142857143,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,15.842105263157894,0.9210526315789473,38,0.9642857142857143,112,7.314708,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.33898305084745767
+*****
+node_2
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.6836158192090399
+*****
+node_4
+Leaf Node: True 
+label: None
+*****
+node_5
+Leaf Node: True 
+label: 0
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+22,3.5,0.35714285714285715,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,23.799999999999997,0.9736842105263158,38,0.9464285714285714,112,53.489302,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.375
+*****
+node_2
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.6610169491525405
+*****
+node_4
+Leaf Node: True 
+label: None
+*****
+node_5
+Leaf Node: True 
+label: 0
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+23,3.5,0.36607142857142855,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.641141074847032,4,3,20.658536585365855,0.7894736842105263,38,0.9553571428571429,112,600.004955,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.6440677966101694
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.16949152542372925
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+24,4.0,0.3482142857142857,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,19.487179487179485,0.8947368421052632,38,0.9642857142857143,112,24.558786,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.6422413793103449
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.14224137931034528
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+25,4.0,0.36607142857142855,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,21.658536585365855,0.9210526315789473,38,0.9553571428571429,112,50.017315,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.1355932203389829
+*****
+node_2
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.7126013264554167
+*****
+node_4
+Leaf Node: True 
+label: None
+*****
+node_5
+Leaf Node: True 
+label: 0
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+26,4.0,0.3392857142857143,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,22.736842105263158,0.9473684210526315,38,0.9464285714285714,112,24.758938,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.23434045689019886
+*****
+node_2
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.6610169491525434
+*****
+node_4
+Leaf Node: True 
+label: None
+*****
+node_5
+Leaf Node: True 
+label: 0
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+27,4.5,0.3482142857142857,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,23.35897435897436,0.9736842105263158,38,0.9553571428571429,112,19.404544,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.7083333333333333
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.17543859649122834
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+28,4.5,0.36607142857142855,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,19.926829268292682,0.868421052631579,38,0.9642857142857143,112,19.594465,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.6964285714285714
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.22619047619047666
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+29,4.5,0.35714285714285715,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,23.0,0.9736842105263158,38,0.9553571428571429,112,27.35593,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.6842105263157853
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.375
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+30,5.0,0.3392857142857143,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,21.789473684210527,0.9473684210526315,38,0.9642857142857143,112,21.910145,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.641949152542373
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.1694915254237292
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+31,5.0,0.375,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,18.0,0.8947368421052632,38,0.9732142857142857,112,11.478934,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.2598870056497168
+*****
+node_2
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.6440677966101694
+*****
+node_4
+Leaf Node: True 
+label: None
+*****
+node_5
+Leaf Node: True 
+label: 0
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+32,5.0,0.3392857142857143,http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data,0.0,4,3,24.736842105263158,0.9210526315789473,38,0.9553571428571429,112,36.053833,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.601515151515151
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.16363636363636352
+*****
+node_3
+Branch node
+applies a split: False
+splits on: None
+split value: None
+*****
+node_4
+Leaf Node: True 
+label: 0
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: None
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2

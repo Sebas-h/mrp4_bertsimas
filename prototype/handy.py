@@ -46,7 +46,7 @@ class Preprocessing:
             df[c] = df[c].astype(int)
     
     def train_test_split(df, split=0.8):
-        train=df.sample(frac=split,random_state=200)
+        train=df.sample(frac=split)
         test=df.drop(train.index)
         
         return train, test
