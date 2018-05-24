@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Following Bertsimas</title>
+
+</head>
+
+<body>
+
+<h2>Following Bertsimas:  Machine Learning through
+a modern optimization lens</h2>
+
+
+
+Student(s): Sebastiaan Higler, Steffen Schneider,
+Krist Shingjergji, Morris Stallmann, Jonas Schmidt;
+
+Supervisor(s): Steven Kelk, Matus Mihalak, Georgios Stamoulis;
+
+Semester: Spring 2018;
+
+
+
+<figure><img style="float: left; padding-right: 20px;"
+
+src="./fig1_decision_tree.png" alt="" width="458" height="300" />
+
+<figcaption>Fig 1. - An optimal decision tree
+
+</figcaption>
+
+</figure>
+
+
+
+<h4>Problem statement and motivation:</h4>
+
+<p align=”justify”>
+Decision trees are graphs used to classify data. Each node is a test, each branch is a possible outcome of that decision.
+For small datasets one can calculate these trees manually, but on large datasets this is not possible.
+To be efficient the tree does not only have to classify all given data but split in a way that the resulting tree is as small and accurate as possible.
+The smallest possible and most accurate tree is called the "Optimal Decision Tree".
+Creating those optimal decision trees is considered to be NP-hard for large datasets.
+Heuristic algorithms are used to still tackle this problem.
+The most commonly used heuristic algorithm for calculating decision trees is CART.
+Decision trees obtained by CART are reasonably accurate and are calculated much faster than a non heuristic algorithm could do it.</p>
+<p align=”justify”>
+The problem is that there is no guarantee that the decision tree returned by CART is the smallest or most accurate one.
+This is where Dimitris Bertsimas steps in:
+He is a mathematician at MIT and proposed to reformulate the task of creating an optimal decision tree as a mathematical one.
+Through Mixed Integer Optimization (MIO) the constrains concerning accuracy and size of the tree can be fed to software such as gurobi specialized on solving these.
+Due to the problem being reformulated in the way he proposed the outcome is guaranteed to be optimal.
+Bertsimas calls his results Optimal Classification Trees (OCT) and the specialized form Opimal Classification Trees with Hyperplanes (OCT-H).
+</p>
+
+
+
+<figure><img style="text-align: center;" src="http://<url to image>" alt="" />
+
+<figcaption>Fig 2. - ???.
+
+</figcaption>
+
+</figure>
+
+
+
+<figure><img style="text-align: center;" src="http://<url to image>" alt="" />
+
+<figcaption>Fig 3. - ???.
+
+</figcaption>
+
+</figure>
+
+
+
+<h4>Research questions/hypotheses:</h4>
+
+<ul>
+
+<li>Can we reproduce Bertsimas experiments concerning OCT and OCT-H</li>
+
+<li>How will our implementations perform compared to Bertsimas and compared to the commonly used CART?</li>
+
+<li>Did we overcome any shortcomings of the paper presented by Bertsimas?</li>
+
+</ul>
+
+
+
+<h4>Main outcomes:</h4>
+
+<ul>
+
+<li>???.</li>
+
+<li>???.</li>
+
+</ul>
+
+
+
+<h4>References:</h4>
+
+<p>D. Bertsimas and J. Dunn, "Optimal classification trees", Machine Learning, vol. 106, no. 7, pp. 1039-1082, Jul. 2017</p>
+<p>L. Breiman, J. Friedman, C. Stone, and R. Olshen, "Classification and Regression Trees", ser. The Wadsworth and Brooks-Cole statistics-probability series. Taylor & Francis, 1984</p>
+TODO Reference for:
+<p>Integer Linear Programming</p>
+
+
+<h4>Downloads:</h4>
+
+<a href=”???” target=”_blank”>Final report</a>
+
+<a href=”???” target=”_blank”>Final presentation</a>
+
+
+
+</body>
+
+</html>
