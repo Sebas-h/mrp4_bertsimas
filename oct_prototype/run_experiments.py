@@ -1,17 +1,18 @@
 import pandas as pd
 import io
 import requests
+import re
 import preprocessing
 from oct import OCT
 from datetime import datetime as dt
 import os
 
-def uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat, train_test_ratio=0.8, header=None, max_time_per_run=300, threads=None, save_to_file=True, print_status=False, f_name=None, character_encoding='utf-8'):
+def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas, repeat, train_test_ratio=0.8, header=None, max_time_per_run=300, threads=None, save_to_file=True, print_status=False, f_name=None, character_encoding='utf-8'):
     """
     TODO: currently only numerical datasets are supported (preprocessing needs to be adjusted)
         input checks need to be added
         
-    url: url to data on uci repository (string)
+    loc: location of dataset (string)
     target_col: number of target column  (to predict)
     tree_depths: list of tree depths to run experiments with
     alphas: list of tree complexity parameters to run experiments with
@@ -41,12 +42,19 @@ def uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat
     stats_training_accuracies = []
     stats_testing_accuracies = []
     
-    
-    #read dataframe from url
-    html = requests.get(url).content
-    s = io.StringIO(html.decode(character_encoding))
-    df = pd.read_csv(s, header=header)
-    
+    df = None
+
+    if is_url(loc):
+        #read dataframe from url
+        html = requests.get(loc).content
+        s = io.StringIO(html.decode(character_encoding))
+        df = pd.read_csv(s, header=header)
+    else:
+        df = pd.read_csv(loc)
+
+    Preprocessing.categorical_to_numerical(df)
+    Preprocessing.boolean_to_numerical(df)
+
     #hot encode if needed
     if not hot_encode_cols is None:
         df, target_col = preprocessing.hot_encode(df, target_col, hot_encode_cols)
@@ -54,7 +62,7 @@ def uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat
     for alpha in alphas:
         for tree_depth in tree_depths:
             for r in range(repeat):
-                stats_data_urls.append(url)
+                stats_data_urls.append(loc)
                 #print(df.head())
                 
                 #preprocessing
@@ -143,6 +151,17 @@ def uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat
     
     return results_df
 
+def is_url(string):
+    regex = re.compile(
+        r'^(?:http|ftp)s?://' # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
+        r'localhost|' #localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+        r'(?::\d+)?' # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
+    return re.match(regex, string) is not None
+
 if __name__=='__main__':
     #target_col = 4#iris
     #target_col=9#fertility diagnosis
@@ -153,15 +172,16 @@ if __name__=='__main__':
     repeat = 3
     threads = 2
     max_time_per_run = 600 #seconds
-    #url='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
-    #url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
-    url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data'
+    #loc='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
+    #loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
+    #loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data'
+    loc = 'data/forecast/forecast.data'
     #f_name = 'iris'
-    f_name = 'balance-scale'
+    f_name = 'forecast'
     hot_encode_cols = None #iris, fertility
     #hot_encode_cols = [1,2,3,4]
     #f_name = 'fertility_diagnosis'
     print_status = True
-    results = uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat, train_test_ratio=train_test_ratio, f_name=f_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status)
+    results = uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas, repeat, train_test_ratio=train_test_ratio, f_name=f_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status)
     #print(results)
     #%%
