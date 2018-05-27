@@ -52,9 +52,6 @@ def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas, repeat
     else:
         df = pd.read_csv(loc)
 
-    Preprocessing.categorical_to_numerical(df)
-    Preprocessing.boolean_to_numerical(df)
-
     #hot encode if needed
     if not hot_encode_cols is None:
         df, target_col = preprocessing.hot_encode(df, target_col, hot_encode_cols)
@@ -165,10 +162,10 @@ def is_url(string):
 if __name__=='__main__':
     #target_col = 4#iris
     #target_col=9#fertility diagnosis
-    target_col=0 #balance-scale
+    target_col='play' #balance-scale
     train_test_ratio = 0.75
     tree_depths=[2]
-    alphas=[0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+    alphas=[0, 0.1, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
     repeat = 3
     threads = 2
     max_time_per_run = 600 #seconds
@@ -179,7 +176,7 @@ if __name__=='__main__':
     #f_name = 'iris'
     f_name = 'forecast'
     hot_encode_cols = None #iris, fertility
-    #hot_encode_cols = [1,2,3,4]
+    hot_encode_cols = ['outlook','temperature','humidity','windy']
     #f_name = 'fertility_diagnosis'
     print_status = True
     results = uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas, repeat, train_test_ratio=train_test_ratio, f_name=f_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status)
