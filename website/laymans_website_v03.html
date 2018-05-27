@@ -26,7 +26,7 @@ Semester: Spring 2018;
 
 <figure><img style="float: left; padding-right: 20px;"
 
-src="./fig1_decision_tree.png" alt="" width="458" height="300" />
+src="./dtree1.png" alt="" width="458" height="300" />
 
 <figcaption>Fig 1. - An optimal decision tree
 
@@ -41,11 +41,11 @@ src="./fig1_decision_tree.png" alt="" width="458" height="300" />
 <p align=”justify”>
 Decision trees are graphs that illustrate consequences of decisions. Starting from the top, at every node a decision has to be made until the bottom of the tree is reached and a final outcome can be inferred. <br> 
 
-In the Machine Learning (ML) community, such trees are often used to classify data. [ADD SEMI-FUNNY EXAMPLE HERE (also explain split and branch)]... <br>
+In the Machine Learning (ML) community, such trees are often used to classify data. <br>
 
-In particular, a rich body of research in ML is concerned with constructing those trees automatically from data and one of the most famous algorithms is CART [reference here]. While being extremely popular and successful, CART shares a disadvantage with many other tree-construction-methods: They use heuristics. That means, these techniques can neither guarantee to construct trees that minimize the total number of misclassified datapoints nor to construct trees that generalize well to unseen data. <br>
+In particular, a rich body of research in ML is concerned with constructing those trees automatically from data and one of the most famous algorithms is CART [Breiman et al, 1984]. While being extremely popular and successful, CART shares a disadvantage with many other tree-construction-methods: They use heuristics. That means, these techniques can neither guarantee to construct trees that minimize the total number of misclassified datapoints nor to construct trees that generalize well to unseen data. <br>
 
-Dimitras Bertsimas is a professor and mathematician at the Massachusetts Institute of Technology (MIT) and researches how mathematical optimization can improve ML-algorithms. Among other things, he is concerned with creating optimal classification trees. He proposes to reformulate the task of creating an optimal classification tree as a mathematical one, namely as a Mixed Integer Optimization (MIO) problem. The reformulation is not a heuristic anymore and can guarantee constructing an optimal tree. Moreover, he introduces a generalization and novel approach, that allows constructing trees splitting on multiple variables at the same time. The guarantee of optimality does however come at a cost. The computational complexity increases significantly which limits the size of the dataset that can be used for these approaches.<br>
+Dimitras Bertsimas is a professor and mathematician at the Massachusetts Institute of Technology (MIT) and researches how mathematical optimization can improve ML-algorithms. Among other things, he is concerned with creating optimal classification trees. He proposes to reformulate the task of creating an optimal classification tree as a mathematical one, namely as a Mixed Integer Optimization (MIO) problem. The reformulation is not a heuristic anymore and can guarantee constructing an optimal tree. Moreover, he introduces a generalization and novel approach, that allows constructing trees splitting on multiple variables at the same time. The guarantee of optimality does, however, come at a cost. The computational complexity increases significantly which limits the size of the dataset that can be used for these approaches.<br>
 
 Bertsimas claims that his methods outperform the famous CART-heuristic and are computational feasible for real world problems. This project is concerned with validating those claims by verifying the soundness of the approach, implementing the model and running experiments with a variety of datasets. <br>
 
@@ -88,9 +88,11 @@ Bertsimas claims that his methods outperform the famous CART-heuristic and are c
 
 <ul>
 
-<li>Implement Bertsimas' classification tree constructing algorithms</li>
+<li>Implementation of Bertsimas' classification tree constructing algorithms</li>
 
-<li>Verify that the implemented methods behave as Bertsimas described</li>
+<li>Verification that the implemented methods behave as Bertsimas described</li>
+
+<li>Correction of mistakes in Bertsimas' paper </li>
 
 </ul>
 
