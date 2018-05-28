@@ -1,0 +1,876 @@
+,alpha,baseline_accuracy,data_source,gap,number of features,number_of_classes,objective_value,testing_accuracy,testing_instances,training_accuracy,training_instances,training_time_sec,tree,tree_depth
+0,0,0.4690831556503198,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.8854961832061069,4,3,279.2681818181818,0.6730769230769231,156,0.720682302771855,469,1200.245533,"node_1
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.5
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+1,0,0.4669509594882729,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,278.4018264840182,0.6987179487179487,156,0.7228144989339019,469,455.010474,"node_1
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+2,0,0.4562899786780384,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.7894736842105113,4,3,291.4813084112149,0.717948717948718,156,0.7164179104477612,469,1200.11988,"node_1
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+3,0,0.464818763326226,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,268.9220183486238,0.6217948717948718,156,0.7334754797441365,469,361.809013,"node_1
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.75
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.24999999999999997
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+4,0,0.464818763326226,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,271.0733944954128,0.6730769230769231,156,0.7313432835820896,469,658.234968,"node_1
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+5,2,0.47974413646055436,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,254.04888888888888,0.6282051282051282,156,0.746268656716418,469,326.645351,"node_1
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+6,2,0.4669509594882729,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,269.4109589041096,0.6089743589743589,156,0.7377398720682303,469,283.167287,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.75
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 2
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+7,2,0.4626865671641791,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,280.48387096774195,0.6794871794871795,156,0.7292110874200426,469,350.352566,"node_1
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+8,2,0.47761194029850745,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,271.90625,0.6794871794871795,156,0.7292110874200426,469,420.083427,"node_1
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.499999999999999
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+9,2,0.4605543710021322,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,283.92592592592587,0.6858974358974359,156,0.7270788912579957,469,390.3356,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 2
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+10,4,0.47334754797441364,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,278.18918918918916,0.6730769230769231,156,0.7313432835820896,469,393.315409,"node_1
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+11,4,0.4626865671641791,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,292.96774193548384,0.6538461538461539,156,0.6950959488272921,469,267.674056,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.2500000000000004
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.5
+*****
+node_4
+Leaf Node: True 
+label: 2
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+12,4,0.464818763326226,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,283.0733944954128,0.6730769230769231,156,0.6886993603411514,469,255.296442,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.2500000000000006
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.2500000000000009
+*****
+node_4
+Leaf Node: True 
+label: 2
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+13,4,0.4669509594882729,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,281.83561643835617,0.6730769230769231,156,0.7313432835820896,469,257.97749,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 2
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+14,4,0.47334754797441364,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,284.52702702702703,0.6923076923076923,156,0.7249466950959488,469,198.947121,"node_1
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+15,5,0.4626865671641791,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,291.64516129032256,0.6858974358974359,156,0.7270788912579957,469,328.103718,"node_1
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+16,5,0.4626865671641791,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,287.3225806451613,0.6730769230769231,156,0.7313432835820896,469,166.972097,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 2
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+17,5,0.47334754797441364,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,283.3018018018018,0.6474358974358975,156,0.7292110874200426,469,367.977459,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.5
+*****
+node_4
+Leaf Node: True 
+label: 2
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+18,5,0.4626865671641791,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,291.64516129032256,0.6858974358974359,156,0.7270788912579957,469,196.613445,"node_1
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+19,5,0.4626865671641791,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,287.3225806451613,0.6730769230769231,156,0.7313432835820896,469,387.130861,"node_1
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 2
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+20,7,0.4840085287846482,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,291.65638766519817,0.6923076923076923,156,0.6929637526652452,469,228.329302,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.2500000000000003
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 2
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
+21,7,0.464818763326226,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.41604027134827426,4,3,296.3761467889908,0.6858974358974359,156,0.7270788912579957,469,1200.007924,"node_1
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+22,7,0.4690831556503198,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,291.7409090909091,0.6794871794871795,156,0.7292110874200426,469,439.363864,"node_1
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+23,7,0.4605543710021322,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,296.7546296296296,0.6794871794871795,156,0.7292110874200426,469,272.611685,"node_1
+Branch node
+applies a split: True
+splits on: 1
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 1
+*****
+node_5
+Leaf Node: True 
+label: 2
+*****
+node_6
+Leaf Node: True 
+label: 2
+*****
+node_7
+Leaf Node: True 
+label: 1
+*****
+",2
+24,7,0.47334754797441364,https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data,0.0,4,3,287.18918918918916,0.6730769230769231,156,0.7313432835820896,469,260.416966,"node_1
+Branch node
+applies a split: True
+splits on: 2
+split value: 0.5
+*****
+node_2
+Branch node
+applies a split: True
+splits on: 0
+split value: 0.25
+*****
+node_3
+Branch node
+applies a split: True
+splits on: 3
+split value: 0.25
+*****
+node_4
+Leaf Node: True 
+label: 2
+*****
+node_5
+Leaf Node: True 
+label: 1
+*****
+node_6
+Leaf Node: True 
+label: 1
+*****
+node_7
+Leaf Node: True 
+label: 2
+*****
+",2
