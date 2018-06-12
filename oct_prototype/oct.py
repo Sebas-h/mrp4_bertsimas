@@ -137,6 +137,7 @@ class OCT:
             self.d.append(self.model.addVar(vtype=gurobipy.GRB.BINARY, lb=0.0, ub=1.0, name='node_{0}_applies_split'.format(t))) #d_t
             #for j in range(self.n_independent_var):
             self.a.append([self.model.addVar(vtype=gurobipy.GRB.BINARY, name='node_{0}_splits_on_feature_{1}'.format(t,j)) for j in range(self.n_independent_var)]) # a_{j,t}
+
         # to allocate points to leaves    
         for t in self.leaf_nodes:
             self.l.append(self.model.addVar(vtype=gurobipy.GRB.BINARY, name='node_{0}_contains_any_point'.format(t)))
