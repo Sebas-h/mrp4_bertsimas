@@ -1,8 +1,8 @@
 import pandas as pd
 import io
 import requests
-from handy import Preprocessing
-from oct_prototype import OCT
+import preprocessing
+from oct import OCT
 from datetime import datetime as dt
 import os
 
@@ -49,7 +49,7 @@ def uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat
     
     #hot encode if needed
     if not hot_encode_cols is None:
-        df, target_col = Preprocessing.hot_encode(df, target_col, hot_encode_cols)
+        df, target_col = preprocessing.hot_encode(df, target_col, hot_encode_cols)
     
     for alpha in alphas:
         for tree_depth in tree_depths:
@@ -59,7 +59,7 @@ def uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat
                 
                 #preprocessing
                 #split into training and testing
-                train_df, test_df = Preprocessing.train_test_split(df, split=train_test_ratio)
+                train_df, test_df = preprocessing.train_test_split(df, split=train_test_ratio)
                 stats_training_instances.append(len(train_df))
                 stats_testing_instances.append(len(test_df))
                 
@@ -71,8 +71,8 @@ def uci_experiment(url, target_col, hot_encode_cols, tree_depths, alphas, repeat
                 #print(target_col_name)
                 norm_cols = [col for col in df.columns if not col==target_col_name]
                 #print(norm_cols)
-                Preprocessing.normalize(train_df, norm_cols=norm_cols)
-                Preprocessing.normalize(test_df, norm_cols=norm_cols)
+                preprocessing.normalize(train_df, norm_cols=norm_cols)
+                preprocessing.normalize(test_df, norm_cols=norm_cols)
                 
                 #create oct instance
                 o = OCT(data=train_df,

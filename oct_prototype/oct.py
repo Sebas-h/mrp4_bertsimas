@@ -2,7 +2,7 @@ import gurobipy
 import pandas as pd
 import numpy as np
 from classification_tree import BinClassificationTree
-from handy import Preprocessing
+import preprocessing
 
 """
 gurobi workflow:
@@ -298,7 +298,7 @@ class OCT:
 if __name__=='__main__':
     #target = 'class' #for iris
     target = 4
-    df = pd.read_csv('iris.data')
+    df = pd.read_csv('../data/iris/iris.data')
     target_name = df.columns[target]
     print(target_name)
     norm_cols = [col for col in df.columns if not col==target_name]
@@ -309,14 +309,14 @@ if __name__=='__main__':
     print(norm_cols)
     #Preprocessing.categorical_to_numerical(df)
     #Preprocessing.boolean_to_numerical(df)
-    Preprocessing.normalize(df, norm_cols=norm_cols)
+    preprocessing.normalize(df, norm_cols=norm_cols)
     print(df.head())
     #%%
     
     #%%
     tree_complexity = 0.05
     tree_depth = 1
-    df_train, df_test = Preprocessing.train_test_split(df, split=0.8)
+    df_train, df_test = preprocessing.train_test_split(df, split=0.8)
     print('Training samples: {0}'.format(len(df_train)))
     print('Testing samples: {0}'.format(len(df_test)))
     o = OCT(df_train, target, tree_complexity, tree_depth)
