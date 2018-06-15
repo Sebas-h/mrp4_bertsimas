@@ -1,8 +1,8 @@
 import gurobipy
 import pandas as pd
 import numpy as np
-from classification_tree import BinClassificationTree
-import preprocessing
+from oct_prototype.classification_tree import BinClassificationTree
+import oct_prototype.preprocessing as preprocessing
 
 """
 gurobi workflow:

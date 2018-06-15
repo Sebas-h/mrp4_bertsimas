@@ -2,8 +2,8 @@
 .vscode/*
 bertsimas/*
 **/gurobi.log
-prototype/*.lp
-prototype/*.sol
-prototype/experiments/
+**/*.lp
+**/*.sol
 **/__pycache__
+octh_prototype/results/*
 
