@@ -7,7 +7,7 @@ from oct import OCT
 from datetime import datetime as dt
 import os
 
-def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas, repeat, train_test_ratio=0.8, header=None, max_time_per_run=300, threads=None, save_to_file=True, print_status=False, f_name=None, character_encoding='utf-8'):
+def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas, repeat, train_test_ratio=0.8, header=None, max_time_per_run=300, threads=None, save_to_file=True, print_status=False, f_name=None, character_encoding='utf-8', warm_start=False):
     """
     TODO: currently only numerical datasets are supported (preprocessing needs to be adjusted)
         input checks need to be added
@@ -83,7 +83,8 @@ def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas, repeat
                 o = OCT(data=train_df,
                         target=target_col,
                         tree_complexity=alpha,
-                        tree_depth=tree_depth)
+                        tree_depth=tree_depth,
+                        warm_start=warm_start)
                 
                 stats_n_classes.append(o.n_classes)
                 stats_n_features.append(o.n_independent_var)
@@ -160,25 +161,26 @@ def is_url(string):
     return re.match(regex, string) is not None
 
 if __name__=='__main__':
-    #target_col = 4#iris
-    #target_col=9#fertility diagnosis
-    target_col='play' #balance-scale
+    warm_starts = True
+    target_col = 4#iris
+    # target_col=9#fertility diagnosis
+    # target_col='play' #balance-scale
     train_test_ratio = 0.75
     tree_depths=[2]
     alphas=[0, 0.1, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
     repeat = 3
     threads = 2
     max_time_per_run = 600 #seconds
-    #loc='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
-    #loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
-    #loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data'
-    loc = 'data/forecast/forecast.data'
-    #f_name = 'iris'
-    f_name = 'forecast'
+    loc='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
+    # loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
+    # loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data'
+    # loc = 'data/forecast/forecast.data'
+    f_name = 'iris'
+    # f_name = 'forecast'
+    # f_name = 'fertility_diagnosis'
     hot_encode_cols = None #iris, fertility
-    hot_encode_cols = ['outlook','temperature','humidity','windy']
-    #f_name = 'fertility_diagnosis'
+    # hot_encode_cols = ['outlook','temperature','humidity','windy']
     print_status = True
-    results = uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas, repeat, train_test_ratio=train_test_ratio, f_name=f_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status)
+    results = uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas, repeat, train_test_ratio=train_test_ratio, f_name=f_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status, warm_start=warm_starts)
     #print(results)
     #%%

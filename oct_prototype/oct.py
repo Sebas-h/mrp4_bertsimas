@@ -15,7 +15,8 @@ gurobi workflow:
 
 class OCT:
     
-    def __init__(self, data, target, tree_complexity, tree_depth):
+
+    def __init__(self, data, target, tree_complexity, tree_depth, warm_start=False):
         """
         #TODO: Idea: feed in training data and target data separately
         
@@ -78,6 +79,10 @@ class OCT:
         
         #self.all_contraints = []        
         self.add_variables()
+        
+        if warm_start:
+            self.warm_start()
+        
         self.model.update()
         self.set_objective()
         self.add_constraints()
@@ -151,7 +156,47 @@ class OCT:
             
             self.L_t.append(self.model.addVar(vtype=gurobipy.GRB.INTEGER, name='missclassification_error_in_node_{0}'.format(t)))
             
+    
+    def warm_start(self):
+        from cart import CART
+
+        # run cart with same data and congfiguration
+        cart = CART(self.data[self.not_target_cols], self.data[self.target_trans])
+        cart.run_cart(self.min_number_node, self.tree_depth-1)
+
+        branch_nodes, leaf_nodes, datapoints = cart.translate_tree()
+
+        # set initial values
+        for i, bn in enumerate(branch_nodes):
+            # set threshold (b_t)
+            self.b[i].start = bn.threshold
+
+            # set if branch applies split or not (d_t)
+            self.d[i].start = 1 if bn.applies_split else 0
+
+            # set feature to split on (a_{j,t})
+            for j in range(self.n_independent_var):
+                self.a[i][j].start = 1 if j == bn.split_feature else 0
+
+        for i, ln in enumerate(leaf_nodes):
+            # l_t
+            self.l[i].start = 1 if ln.num_datapoints > 0 else 0
+            # z_it
+            for j in range(int(self.n_data_points)):
+                self.z[i][j] = 1 if datapoints[j] == ln.id else 0
             
+            # N_t
+            self.N_t[i].start = ln.num_datapoints
+            # N_k_t
+            for k in range(self.n_classes):
+                self.N_k_t[i][k].start = 0 if ln.value is None else ln.value[0][k]
+            # c_k_t
+            for k in range(self.n_classes):
+                self.c_k_t[i][k].start = 1 if ln.label == k else 0
+
+            # L_t 
+            self.L_t[i].start = ln.num_missclass
+        
     
     def calculate_epsilon(self):
         epsilon = np.array([np.inf]*len(self.not_target_cols))
