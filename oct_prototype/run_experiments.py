@@ -133,11 +133,14 @@ def gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, decre
     
     train_df, val_df = preprocessing.train_test_split(train_val_df, split=train_val_ratio)
     l_hat, mis_points = baseline_accuracy(train_df, target_col_name)
-    #alpha_max = mis_points/l_hat
-    alpha_max = 9.92419825072886
-    test_n_alphas = 2
-    print('Testing maximum of {0} values for alpha between {1} and {2}.'.format(test_n_alphas, 0, alpha_max))
-    alphas = np.linspace(0, alpha_max, test_n_alphas)
+    alpha_max = mis_points/l_hat
+    alpha_min = 0
+    #alpha_min = 9.92419825072886
+    #alpha_max = 9.92419825072886
+    tree_depth = tree_depths[0]
+    test_n_alphas = 50
+    print('Testing maximum of {0} values for alpha between {1} and {2}.'.format(test_n_alphas, alpha_min, alpha_max))
+    alphas = np.linspace(alpha_min, alpha_max, test_n_alphas)
     
     all_results = []
     norm_cols = [col for col in train_val_df.columns if not col==target_col_name]
