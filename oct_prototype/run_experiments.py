@@ -122,23 +122,20 @@ def baseline_accuracy(df, target_col_name):
     print('Baseline Accuracy: {0} and number of misclassified points: {1}'.format(baseline_accuracy, misclassified_points))
     return baseline_accuracy, misclassified_points
 
-def gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, decrease_threshold = 0.05):
+def gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=8, decrease_threshold = 0.05, p = 0.02, print_status=True):
     """
     stop if accuracy is worse than best_accuracy-decrease_threshold
-    """
-    
-    
-    print('Starting parameter tuning.')
-    
-    
+    p: after running algorithm, calculate alpha by taking take mean of all alphas that achieved accuracy within range of p of best acc
+    """   
+    print('Starting parameter tuning.')    
     train_df, val_df = preprocessing.train_test_split(train_val_df, split=train_val_ratio)
     l_hat, mis_points = baseline_accuracy(train_df, target_col_name)
     alpha_max = mis_points/l_hat
     alpha_min = 0
     #alpha_min = 9.92419825072886
     #alpha_max = 9.92419825072886
-    tree_depth = tree_depths[0]
     test_n_alphas = 50
+    #test_n_alphas = 1
     print('Testing maximum of {0} values for alpha between {1} and {2}.'.format(test_n_alphas, alpha_min, alpha_max))
     alphas = np.linspace(alpha_min, alpha_max, test_n_alphas)
     
@@ -149,7 +146,7 @@ def gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, decre
         print('Testing alpha={0}'.format(alpha))   
         
         for tree_depth in tree_depths:
-            for r in range(repeat):
+            for r in range(val_repeat):
                 #create new train/val
                 train_df, val_df = preprocessing.train_test_split(train_val_df, split=train_val_ratio)
                 #preprocessing
@@ -177,7 +174,13 @@ def gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, decre
             if alpha_acc < best_alpha_acc-decrease_threshold:
                 print('Accuracy for alpha={0}: {1} is worse than best accuracy for alpha={2}: {3}.\nStopping criterion is met...'.format(alpha, alpha_acc, best_alpha, best_alpha_acc ))
                 break
-        
+    
+    #take mean of top_n best alphas
+    #best_alpha = np.mean(aggregated.sort_values(by='testing_accuracy', ascending=False).index[:top_n])
+    
+    #take mean of all alphas that achieved accuracy within p of best acc
+    #p = 0.02
+    best_alpha = np.mean(aggregated[aggregated['testing_accuracy']>best_alpha_acc-p].index)
     
     return results_df, aggregated, best_alpha
 
@@ -235,29 +238,6 @@ def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas_tuning,
     
     results_df, aggregated, best_alpha = hyperparameter_tuning(method='auto', train_val_df=train_val_df, train_val_ratio=train_val_ratio, tree_depths=tree_depths, target_col_name=target_col_name)
     
-    """for alpha in alphas:
-        for tree_depth in tree_depths:
-            for r in range(repeat):
-                #create new train/val
-                train_df, val_df = preprocessing.train_test_split(train_val_df, split=train_val_ratio)
-                #preprocessing
-                #normalize
-                #print(norm_cols)
-                preprocessing.normalize(train_df, norm_cols=norm_cols)
-                #print(train_df.head())                
-                preprocessing.normalize(val_df, norm_cols=norm_cols)
-                
-                all_results.append(get_results(train_df=train_df,
-                               test_df=val_df,
-                               alpha=alpha,
-                               tree_depth=tree_depth, 
-                               max_time_per_run=max_time_per_run,
-                               threads=threads,
-                               print_status=print_status)) #list of dataframes
-    
-    results_df = pd.concat(all_results)
-    aggregated = calc_mean_accuracy_per_alpha(results_df)
-    best_alpha = aggregated.idxmax()['testing_accuracy'] #df is indexed by alpha"""
     print('Validation done. Best alpha: {0}'.format(best_alpha))
     
     #get final result/ accuracy
@@ -306,8 +286,8 @@ def is_url(string):
     return re.match(regex, string) is not None
 
 if __name__=='__main__':
-    target_col = 4#iris
-    #target_col=9#fertility diagnosis
+    #target_col = 4#iris
+    target_col=9#fertility diagnosis
     #target_col='play' #balance-scale
     train_test_ratio = 0.75
     train_val_ratio = 0.66
@@ -316,15 +296,15 @@ if __name__=='__main__':
     repeat = 5
     threads = 8
     max_time_per_run = 600 #seconds
-    loc='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
-    #loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
+    #loc='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
+    loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
     #loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data'
     #loc = 'data/forecast/forecast.data'
-    f_name = 'iris'
+    #f_name = 'iris'
     #f_name = 'forecast'
     hot_encode_cols = None #iris, fertility
     #hot_encode_cols = ['outlook','temperature','humidity','windy']
-    #f_name = 'fertility_diagnosis'
+    f_name = 'fertility_diagnosis'
     print_status = True
     for r in range(repeat):
         results = uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alpha_tuning, repeat, train_test_ratio=train_test_ratio, train_val_ratio=train_val_ratio, f_name=f_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status)
