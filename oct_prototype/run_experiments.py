@@ -122,7 +122,52 @@ def baseline_accuracy(df, target_col_name):
     print('Baseline Accuracy: {0} and number of misclassified points: {1}'.format(baseline_accuracy, misclassified_points))
     return baseline_accuracy, misclassified_points
 
-def gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=8, decrease_threshold = 0.05, p = 0.02, print_status=True):
+def bayesian_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=8, print_status=True, max_time_per_run=300):
+    
+    from bayes_opt import BayesianOptimization
+    print('Starting bayesian optimization...')
+    norm_cols = [col for col in train_val_df.columns if not col==target_col_name]
+    
+    #target function for bayesian optimization needs to be defined (strange scoping) 
+    all_results_df = []
+    all_aggregated_df = []
+    
+    def oct_target(alpha):
+        print('Solving ILP for hyperparameter tuning...')
+        all_results = []
+        tree_depth = tree_depths[0]
+        for r in range(val_repeat):
+            train_df, val_df = preprocessing.train_test_split(train_val_df, split=train_val_ratio)
+            preprocessing.normalize(train_df, norm_cols=norm_cols)
+            preprocessing.normalize(val_df, norm_cols=norm_cols)
+            all_results.append(get_results(train_df=train_df,
+                               test_df=val_df,
+                               alpha=alpha,
+                               tree_depth=tree_depth, 
+                               max_time_per_run=max_time_per_run,
+                               threads=threads,
+                               print_status=print_status))
+        
+        results_df = pd.concat(all_results)
+        all_results_df.append(results_df)
+        aggregated = calc_mean_accuracy_per_alpha(results_df)
+        all_aggregated_df.append(aggregated)
+        best_alpha_acc = aggregated.max()['testing_accuracy']
+        return best_alpha_acc
+    
+    alpha_min = 0
+    train_df, val_df = preprocessing.train_test_split(train_val_df, split=train_val_ratio) # need to split for an initial guess on max alpha
+    l_hat, mis_points = baseline_accuracy(train_df, target_col_name)
+    alpha_max = mis_points/l_hat
+    
+    bo = BayesianOptimization(oct_target, {'alpha': (alpha_min, alpha_max)})
+    bo.maximize(init_points=3, n_iter=10, kappa=2)
+    
+    
+    return pd.concat(all_results_df), pd.concat(all_aggregated_df), bo.res['max']['max_params']['alpha']
+    
+
+def gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=8, decrease_threshold = 0.05, p = 0.02, print_status=True, max_time_per_run=300):
     """
     stop if accuracy is worse than best_accuracy-decrease_threshold
     p: after running algorithm, calculate alpha by taking take mean of all alphas that achieved accuracy within range of p of best acc
@@ -186,13 +231,15 @@ def gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_r
 
 
 
-def hyperparameter_tuning(method, train_val_df, train_val_ratio, tree_depths, target_col_name):
+def hyperparameter_tuning(method, train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat):
     
     if method=='auto' or method=='gradient_descent':
-        results_df, aggregated, best_alpha = gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name)
+        results_df, aggregated, best_alpha = gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=val_repeat)
+    if method=='bo':
+        results_df, aggregated, best_alpha = bayesian_tuning(train_val_df=train_val_df, train_val_ratio=train_val_ratio, tree_depths=tree_depths, target_col_name=target_col_name, print_status=print_status, val_repeat=val_repeat)
         
     return results_df, aggregated, best_alpha
-def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas_tuning, repeat, train_test_ratio=0.8, train_val_ratio=0.66, header=None, max_time_per_run=300, threads=None, save_to_file=True, print_status=False, f_name=None, character_encoding='utf-8'):
+def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas_tuning, repeat, val_repeat=3, train_test_ratio=0.8, train_val_ratio=0.66, header=None, max_time_per_run=300, threads=None, save_to_file=True, print_status=False, f_name=None, character_encoding='utf-8'):
     """
     TODO: currently only numerical datasets are supported (preprocessing needs to be adjusted)
         input checks need to be added
@@ -236,7 +283,7 @@ def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas_tuning,
     
     #all_results = [] #all (repeat) experimental results for different values of alpha, tree depths
     
-    results_df, aggregated, best_alpha = hyperparameter_tuning(method='auto', train_val_df=train_val_df, train_val_ratio=train_val_ratio, tree_depths=tree_depths, target_col_name=target_col_name)
+    results_df, aggregated, best_alpha = hyperparameter_tuning(method=alphas_tuning, train_val_df=train_val_df, train_val_ratio=train_val_ratio, tree_depths=tree_depths, target_col_name=target_col_name, val_repeat=val_repeat)
     
     print('Validation done. Best alpha: {0}'.format(best_alpha))
     
@@ -287,26 +334,30 @@ def is_url(string):
 
 if __name__=='__main__':
     #target_col = 4#iris
-    target_col=9#fertility diagnosis
-    #target_col='play' #balance-scale
+    #target_col=9#fertility diagnosis
+    target_col=0 #balance-scale
     train_test_ratio = 0.75
     train_val_ratio = 0.66
     tree_depths=[2] #TODO: CURRENTLY ONLY ONE TREE DEPTH AT A TIME WORKS CORECTLY!!!
-    alpha_tuning='auto'
+    #alpha_tuning='auto'
+    alpha_tuning = 'bo' #bayesian optimization
     repeat = 5
+    val_repeat=1 #how many times should a validation experiment be repeated (average over all runs is final validation)
     threads = 8
     max_time_per_run = 600 #seconds
     #loc='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
-    loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
-    #loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data'
+    #loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
+    loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data'
     #loc = 'data/forecast/forecast.data'
+    f_name = 'balance_scale'
     #f_name = 'iris'
     #f_name = 'forecast'
     hot_encode_cols = None #iris, fertility
     #hot_encode_cols = ['outlook','temperature','humidity','windy']
-    f_name = 'fertility_diagnosis'
+    #f_name = 'fertility_diagnosis'
+    f_name+='_'+alpha_tuning
     print_status = True
     for r in range(repeat):
-        results = uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alpha_tuning, repeat, train_test_ratio=train_test_ratio, train_val_ratio=train_val_ratio, f_name=f_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status)
+        results = uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alpha_tuning, repeat, val_repeat, train_test_ratio=train_test_ratio, train_val_ratio=train_val_ratio, f_name=f_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status)
     #print(results)
     #%%
