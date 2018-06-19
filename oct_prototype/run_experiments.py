@@ -9,7 +9,7 @@ import os
 import numpy as np
 from copy import deepcopy
 
-def get_results(train_df, test_df, alpha, tree_depth, max_time_per_run=300, threads=None, print_status=False, warm_starts=False):
+def get_results(train_df, test_df, alpha, tree_depth, max_time_per_run=300, threads=None, print_status=False, warm_start=False):
     
     #stats
     stats_data_urls = []
@@ -33,7 +33,7 @@ def get_results(train_df, test_df, alpha, tree_depth, max_time_per_run=300, thre
             target=target_col,
             tree_complexity=alpha,
             tree_depth=tree_depth,
-            warm_starts=warm_starts)
+            warm_start=warm_start)
     
     stats_n_classes.append(o.n_classes)
     stats_n_features.append(o.n_independent_var)
@@ -122,7 +122,7 @@ def baseline_accuracy(df, target_col_name):
     print('Baseline Accuracy: {0} and number of misclassified points: {1}'.format(baseline_accuracy, misclassified_points))
     return baseline_accuracy, misclassified_points
 
-def bayesian_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=8, print_status=True, max_time_per_run=300):
+def bayesian_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=8, print_status=True, max_time_per_run=300, warm_start=False):
     
     from bayes_opt import BayesianOptimization
     print('Starting bayesian optimization...')
@@ -146,7 +146,8 @@ def bayesian_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name,
                                tree_depth=tree_depth, 
                                max_time_per_run=max_time_per_run,
                                threads=threads,
-                               print_status=print_status))
+                               print_status=print_status,
+                               warm_start=warm_start))
         
         results_df = pd.concat(all_results)
         all_results_df.append(results_df)
@@ -167,7 +168,7 @@ def bayesian_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name,
     return pd.concat(all_results_df), pd.concat(all_aggregated_df), bo.res['max']['max_params']['alpha']
     
 
-def gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=8, decrease_threshold = 0.05, p = 0.02, print_status=True, max_time_per_run=300):
+def gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=8, decrease_threshold = 0.05, p = 0.02, print_status=True, max_time_per_run=300, warm_start=False):
     """
     stop if accuracy is worse than best_accuracy-decrease_threshold
     p: after running algorithm, calculate alpha by taking take mean of all alphas that achieved accuracy within range of p of best acc
@@ -200,12 +201,13 @@ def gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_r
                 preprocessing.normalize(val_df, norm_cols=norm_cols)
                 
                 all_results.append(get_results(train_df=train_df,
-                               test_df=val_df,
-                               alpha=alpha,
-                               tree_depth=tree_depth, 
-                               max_time_per_run=max_time_per_run,
-                               threads=threads,
-                                   print_status=print_status)) #list of dataframes
+                                test_df=val_df,
+                                alpha=alpha,
+                                tree_depth=tree_depth, 
+                                max_time_per_run=max_time_per_run,
+                                threads=threads,
+                                print_status=print_status,
+                                warm_start=warm_start)) #list of dataframes
         
         if not alpha==0:        
             results_df = pd.concat(all_results)
@@ -231,15 +233,16 @@ def gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_r
 
 
 
-def hyperparameter_tuning(method, train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat):
+def hyperparameter_tuning(method, train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat, warm_start):
     
     if method=='auto' or method=='gradient_descent':
-        results_df, aggregated, best_alpha = gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=val_repeat)
+        results_df, aggregated, best_alpha = gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=val_repeat, warm_start=warm_start)
     if method=='bo':
-        results_df, aggregated, best_alpha = bayesian_tuning(train_val_df=train_val_df, train_val_ratio=train_val_ratio, tree_depths=tree_depths, target_col_name=target_col_name, print_status=print_status, val_repeat=val_repeat)
+        results_df, aggregated, best_alpha = bayesian_tuning(train_val_df=train_val_df, train_val_ratio=train_val_ratio, tree_depths=tree_depths, target_col_name=target_col_name, print_status=print_status, val_repeat=val_repeat, warm_start=warm_start)
         
     return results_df, aggregated, best_alpha
-def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas_tuning, repeat, val_repeat=3, train_test_ratio=0.8, train_val_ratio=0.66, header=None, max_time_per_run=300, threads=None, save_to_file=True, print_status=False, f_name=None, character_encoding='utf-8'):
+
+def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas_tuning, repeat, val_repeat=3, train_test_ratio=0.8, train_val_ratio=0.66, header=None, max_time_per_run=300, threads=None, save_to_file=True, print_status=False, f_name=None, character_encoding='utf-8', warm_start=False):
     """
     TODO: currently only numerical datasets are supported (preprocessing needs to be adjusted)
         input checks need to be added
@@ -283,7 +286,7 @@ def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas_tuning,
     
     #all_results = [] #all (repeat) experimental results for different values of alpha, tree depths
     
-    results_df, aggregated, best_alpha = hyperparameter_tuning(method=alphas_tuning, train_val_df=train_val_df, train_val_ratio=train_val_ratio, tree_depths=tree_depths, target_col_name=target_col_name, val_repeat=val_repeat)
+    results_df, aggregated, best_alpha = hyperparameter_tuning(method=alphas_tuning, train_val_df=train_val_df, train_val_ratio=train_val_ratio, tree_depths=tree_depths, target_col_name=target_col_name, val_repeat=val_repeat, warm_start=warm_start)
     
     print('Validation done. Best alpha: {0}'.format(best_alpha))
     
@@ -301,7 +304,8 @@ def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas_tuning,
                            tree_depth=tree_depth, 
                            max_time_per_run=max_time_per_run,
                            threads=threads,
-                           print_status=print_status)) #list of dataframes
+                           print_status=print_status,
+                           warm_start=warm_start)) #list of dataframes
 
     final_results_df = pd.concat(final_results)
     aggregated_final = calc_mean_accuracy_per_alpha(final_results_df)
@@ -334,7 +338,7 @@ def is_url(string):
 
 if __name__=='__main__':
     #target_col = 4#iris
-    warm_starts = False
+    warm_start = True
     #target_col=9#fertility diagnosis
     target_col=0 #balance-scale
     train_test_ratio = 0.75
@@ -359,6 +363,6 @@ if __name__=='__main__':
     f_name+='_'+alpha_tuning
     print_status = True
     for r in range(repeat):
-        results = uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alpha_tuning, repeat, val_repeat, train_test_ratio=train_test_ratio, train_val_ratio=train_val_ratio, f_name=f_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status, warm_starts=warm_starts)
+        results = uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alpha_tuning, repeat, val_repeat, train_test_ratio=train_test_ratio, train_val_ratio=train_val_ratio, f_name=f_name, threads=threads, max_time_per_run=max_time_per_run, print_status=print_status, warm_start=warm_start)
     #print(results)
     #%%
