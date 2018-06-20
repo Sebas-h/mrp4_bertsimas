@@ -162,7 +162,7 @@ def bayesian_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name,
     alpha_max = mis_points/l_hat
     
     bo = BayesianOptimization(oct_target, {'alpha': (alpha_min, alpha_max)})
-    n_iter = 10
+    n_iter = 20
     bo.maximize(init_points=2, n_iter=n_iter, kappa=2)
     
     
