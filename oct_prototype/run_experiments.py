@@ -162,7 +162,8 @@ def bayesian_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name,
     alpha_max = mis_points/l_hat
     
     bo = BayesianOptimization(oct_target, {'alpha': (alpha_min, alpha_max)})
-    bo.maximize(init_points=3, n_iter=10, kappa=2)
+    n_iter = 10
+    bo.maximize(init_points=2, n_iter=n_iter, kappa=2)
     
     
     return pd.concat(all_results_df), pd.concat(all_aggregated_df), bo.res['max']['max_params']['alpha']
@@ -348,7 +349,7 @@ if __name__=='__main__':
     alpha_tuning = 'bo' #bayesian optimization
     repeat = 5
     val_repeat=1 #how many times should a validation experiment be repeated (average over all runs is final validation)
-    threads = 8
+    threads = 10
     max_time_per_run = 600 #seconds
     #loc='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
     #loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
