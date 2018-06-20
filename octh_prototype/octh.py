@@ -18,7 +18,7 @@ Gurobi workflow:
 
 class OCTH:
 
-    def __init__(self, data, target, tree_complexity, tree_depth):
+    def __init__(self, data, target, tree_complexity, tree_depth, warm_start=False):
         """
         data = pandas dataframe holding data
         target = column name of target variable (string)
@@ -94,8 +94,14 @@ class OCTH:
         self.L_t = []  # missclassification error
         self.tree = None
 
-        # self.all_contraints = []
+        # Add variables to gurobi model
         self.add_variables()
+
+        # Add warm start values
+        if warm_start:
+            self.warm_start()
+
+        # Update model, set objective, and add constraints
         self.model.update()
         self.set_objective()
         self.add_constraints()
@@ -310,6 +316,9 @@ class OCTH:
     def _get_baseline_accuracy(self):
         return np.max(
             (np.unique(self.data.groupby(by=self.target_var).count().iloc[:, :].values)[-1])) / self.n_data_points
+
+    def warm_start(self):
+        return 1
 
 
 if __name__ == '__main__':
