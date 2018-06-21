@@ -1,8 +1,8 @@
 import gurobipy
+from os import cpu_count
 import pandas as pd
 import numpy as np
-# from oct_prototype.classification_tree import BinClassificationTree
-from binary_tree import BinClassificationTree
+from octh_prototype.binary_tree import BinClassificationTree
 import oct_prototype.preprocessing as preprocessing
 
 """
@@ -18,14 +18,15 @@ Gurobi workflow:
 
 class OCTH:
 
-    def __init__(self, data, target, tree_complexity, tree_depth):
+    def __init__(self, data, target, tree_complexity, tree_depth, warm_start=False):
         """
         data = pandas dataframe holding data
         target = column name of target variable (string)
         """
-
-        # create gurobi model
         self.model = gurobipy.Model()
+
+        if warm_start:
+            self.deep_copy_data = data.copy()
 
         self.data = data
         if isinstance(target, str):
@@ -94,8 +95,14 @@ class OCTH:
         self.L_t = []  # missclassification error
         self.tree = None
 
-        # self.all_contraints = []
+        # Add variables to gurobi model
         self.add_variables()
+
+        # Add warm start values
+        if warm_start:
+            self.warm_start()
+
+        # Update model, set objective, and add constraints
         self.model.update()
         self.set_objective()
         self.add_constraints()
@@ -186,7 +193,6 @@ class OCTH:
                 vtype=gurobipy.GRB.INTEGER, name='missclassification_error_in_node_{0}'.format(t)))
 
     def add_constraints(self):
-        # TODO: concat loops for efficiency
         # enforce structure of tree:
         # split constraints for a, b, d; formulas (2) and (3)
         for t_no, t in enumerate(self.branch_nodes):
@@ -273,14 +279,15 @@ class OCTH:
             )
         )
 
-    def fit(self, time_limit=300, threads=None):
+    def fit(self, time_limit=300, gurobi_print_output=True):
         """
         time_limit: maximum time in seconds for running gurobi optimization
         threads: how many threads to use, if set to None, gurobi default
         """
+        if not gurobi_print_output:
+            self.model.setParam('OutputFlag', 0)
         self.model.Params.timeLimit = time_limit
-        if not threads is None:
-            self.model.Params.Threads = threads
+        self.model.Params.Threads = cpu_count()
         # TODO: add stop criterion: if gap hadn't changed for x seconds, then abort
         self.model.optimize()
         self.create_tree()  # create classification tree
@@ -311,32 +318,58 @@ class OCTH:
         return np.max(
             (np.unique(self.data.groupby(by=self.target_var).count().iloc[:, :].values)[-1])) / self.n_data_points
 
+    def warm_start(self):
+        from octh_prototype.warm_start import BinTree
+
+        bt = BinTree(self.deep_copy_data, self.target_var, self.n_independent_var, self.n_data_points, self.n_classes,
+                     self.class_to_number, self.tree_complexity, self.tree_depth - 1)
+        bt.rec_greedy_octh(1, [x for x in range(self.deep_copy_data.shape[0])])
+
+        for i, bn in enumerate(bt.branch_nodes):
+            for j in range(self.n_independent_var):
+                self.a[i][j].start = bn.a[j]
+                self.a_hat[i][j].start = bn.a_hat[j]
+                self.s[i][j].start = bn.s[j]
+            self.b[i].start = bn.b
+            self.d[i].start = bn.d
+
+        for i, ln in enumerate(bt.leaf_nodes):
+            self.l[i].start = ln.l
+
+            for j in range(int(self.n_data_points)):
+                self.z[i][j].start = ln.z[j]
+
+            self.N_t[i].start = ln.n_t
+
+            for j in range(int(self.n_classes)):
+                self.N_k_t[i][j].start = ln.n_k_t[j]
+                self.c_k_t[i][j].start = ln.c_k_t[j]
+
+            self.L_t[i].start = ln.l_t
+
 
 if __name__ == '__main__':
-    # target = 'class'  # for iris
+    # data
     target = 4
     df = pd.read_csv('../data/iris/iris.data')
     target_name = df.columns[target]
-    print(target_name)
     norm_cols = [col for col in df.columns if not col == target_name]
-    print(norm_cols)
     preprocessing.normalize(df, norm_cols=norm_cols)
-    print(df.head())
+
     # Parameters:
     tree_complexity = 2
     tree_depth = 2
     df_train, df_test = preprocessing.train_test_split(df, split=0.8)
     print('Training samples: {0}'.format(len(df_train)))
     print('Testing samples: {0}'.format(len(df_test)))
-    o = OCTH(df_train, target, tree_complexity, tree_depth)
-    o.model.write('oct_example.lp')
+    o = OCTH(df_train, target, tree_complexity, tree_depth, warm_start=True)
     o.fit()
-    o.model.write('oct.sol')
-    print('*' * 10)
-    print('SOLUTION')
-    print('*' * 10)
-    print(o.tree)
+
+    # print('*' * 10)
+    # print('SOLUTION')
+    # print('*' * 10)
+    # print(o.tree)
     preds = o.predict(df, feat_cols=norm_cols)
     print('Training accuracy: {0}'.format(o.training_accuracy()))
     print('Testing accuracy: {0}'.format(o.accuracy_on_test(df_test, target)))
-    o.model.MIPGap
+    # o.model.MIPGap

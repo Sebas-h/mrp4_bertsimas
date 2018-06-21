@@ -365,7 +365,7 @@ if __name__=='__main__':
     df_train, df_test = preprocessing.train_test_split(df, split=0.8)
     print('Training samples: {0}'.format(len(df_train)))
     print('Testing samples: {0}'.format(len(df_test)))
-    o = OCT(df_train, target, tree_complexity, tree_depth)
+    o = OCT(df_train, target, tree_complexity, tree_depth, warm_start=True)
     #print('Number of independent variables: {0}'.format(o.n_independent_var))
     #print()
     #print('Baseline: {0}\nN_min: {1}'.format(o.norm_constant, o.min_number_node))
@@ -384,10 +384,10 @@ if __name__=='__main__':
     #print()
     #print('Cost matrix Y:\n{0}'.format(o.cost_matrix))
     #print()
-    o.model.write('oct_example.lp')
+    # o.model.write('oct_example.lp')
     #%%
     o.fit()
-    o.model.write('oct.sol')
+    # o.model.write('oct.sol')
     #%%
     print('*'*10)
     print('SOLUTION')
@@ -406,4 +406,4 @@ if __name__=='__main__':
     print('Training accuracy: {0}'.format(o.training_accuracy()))
     print('Testing accuracy: {0}'.format(o.accuracy_on_test(df_test,target)))
     #%%
-    o.model.MIPGap
+    # o.model.MIPGap
