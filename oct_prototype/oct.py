@@ -183,7 +183,7 @@ class OCT:
             self.l[i].start = 1 if ln.num_datapoints > 0 else 0
             # z_it
             for j in range(int(self.n_data_points)):
-                self.z[i][j] = 1 if datapoints[j] == ln.id else 0
+                self.z[i][j].start = 1 if datapoints[j] == ln.id else 0
             
             # N_t
             self.N_t[i].start = ln.num_datapoints
