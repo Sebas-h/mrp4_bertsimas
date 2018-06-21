@@ -162,7 +162,9 @@ def bayesian_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name,
     alpha_max = mis_points/l_hat
     
     bo = BayesianOptimization(oct_target, {'alpha': (alpha_min, alpha_max)})
-    n_iter = 20
+    n_iter = int(alpha_max*(2/15))+1
+    if n_iter<5:
+        n_iter = 10
     bo.maximize(init_points=2, n_iter=n_iter, kappa=2)
     
     
@@ -294,7 +296,7 @@ def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas_tuning,
     #get final result/ accuracy
     final_results = []
     for tree_depth in tree_depths:
-        for r in range(repeat):
+        for r in range(1):
             train_df, val_df = preprocessing.train_test_split(train_val_df, split=0.66)
             preprocessing.normalize(train_df, norm_cols=norm_cols)
             preprocessing.normalize(test_df, norm_cols=norm_cols)                
@@ -344,11 +346,11 @@ if __name__=='__main__':
     target_col=0 #balance-scale
     train_test_ratio = 0.75
     train_val_ratio = 0.66
-    tree_depths=[2] #TODO: CURRENTLY ONLY ONE TREE DEPTH AT A TIME WORKS CORECTLY!!!
+    tree_depths=[4] #TODO: CURRENTLY ONLY ONE TREE DEPTH AT A TIME WORKS CORECTLY!!!
     #alpha_tuning='auto'
     alpha_tuning = 'bo' #bayesian optimization
     repeat = 5
-    val_repeat=1 #how many times should a validation experiment be repeated (average over all runs is final validation)
+    val_repeat=5 #how many times should a validation experiment be repeated (average over all runs is final validation)
     threads = 10
     max_time_per_run = 600 #seconds
     #loc='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
