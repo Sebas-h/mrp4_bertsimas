@@ -3,8 +3,7 @@ import io
 import requests
 import re
 import oct_prototype.preprocessing as preprocessing
-# from octh_prototype.octh import OCTH
-from oct_prototype.oct import OCT
+from octh_prototype.octh import OCTH
 from datetime import datetime as dt
 import os
 
@@ -76,10 +75,10 @@ def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas, repeat
                 preprocessing.normalize(train_df, norm_cols=norm_cols)
                 preprocessing.normalize(test_df, norm_cols=norm_cols)
                 # create oct instance
-                o = OCT(data=train_df,
-                        target=target_col,
-                        tree_complexity=alpha,
-                        tree_depth=tree_depth)
+                o = OCTH(data=train_df,
+                         target=target_col,
+                         tree_complexity=alpha,
+                         tree_depth=tree_depth)
 
                 stats_n_classes.append(o.n_classes)
                 stats_n_features.append(o.n_independent_var)
