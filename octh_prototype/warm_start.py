@@ -118,7 +118,7 @@ class BinTree:
         self.leaf_nodes.append(node)
 
     def rec_greedy_octh(self, node_id, data_df_indices):
-        print('####', str(node_id), '####')
+        print('### node {0} ###'.format(node_id))
         # Does current node have leaf nodes as child nodes
         has_leafs = node_id > ((2 ** (self.depth_output_tree - 1)) - 1)
 
@@ -145,7 +145,7 @@ class BinTree:
 
         # Current node does not apply a split
         if o.model.getVarByName('node_{0}_applies_split'.format(1)).X < 1:
-            leaf_depth = self.depth_output_tree - int(math.floor(node_id / 2))
+            leaf_depth = self.depth_output_tree - int(math.floor(math.log2(node_id)))
             branching_depths = leaf_depth - 1
 
             branch_node_ids = [node_id]
@@ -188,7 +188,8 @@ class BinTree:
         if has_leafs:
             for t in (2, 3):
                 ln = LeafNode()
-                ln.create(o, (node_id * 2) + (t - 2), data_df_indices, self.num_datapoints, self.class_to_number)
+                ln.create(o, t, data_df_indices, self.num_datapoints, self.class_to_number)
+                ln.id = (node_id * 2) + (t - 2)
                 self.add_leaf_node(ln)
             return
 

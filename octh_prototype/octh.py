@@ -1,5 +1,6 @@
 import gurobipy
 from os import cpu_count
+import operator
 import pandas as pd
 import numpy as np
 from octh_prototype.binary_tree import BinClassificationTree
@@ -24,9 +25,6 @@ class OCTH:
         target = column name of target variable (string)
         """
         self.model = gurobipy.Model()
-
-        if warm_start:
-            self.deep_copy_data = data.copy()
 
         self.data = data
         if isinstance(target, str):
@@ -55,8 +53,7 @@ class OCTH:
         self.number_to_class = {no: c for no, c in enumerate(classes)}
 
         # Add new targets
-        self.data[self.target_trans] = self.data[self.target_var].apply(
-            lambda c: self.class_to_number.get(c))
+        self.data[self.target_trans] = self.data[self.target_var].apply(lambda c: self.class_to_number.get(c))
 
         # Max number of nodes
         self.tree_max_nodes = np.power(2, self.tree_depth) - 1  # T
@@ -320,11 +317,15 @@ class OCTH:
 
     def warm_start(self):
         from octh_prototype.warm_start import BinTree
-        bt = BinTree(self.deep_copy_data, self.target_var, self.n_independent_var, self.n_data_points, self.n_classes,
+        bt = BinTree(self.data.iloc[:, :-1], self.target_var, self.n_independent_var, self.n_data_points,
+                     self.n_classes,
                      self.class_to_number, self.tree_complexity, self.tree_depth - 1)
-        bt.rec_greedy_octh(1, [x for x in range(self.deep_copy_data.shape[0])])
+        bt.rec_greedy_octh(1, [x for x in range(self.data.shape[0])])
 
-        # TODO: check if the nodes are in the same order in both lists
+        # Sort list of branch and leaf nodes by id (increasing order)
+        bt.branch_nodes.sort(key=operator.attrgetter("id"), reverse=False)
+        bt.leaf_nodes.sort(key=operator.attrgetter("id"), reverse=False)
+
         for i, bn in enumerate(bt.branch_nodes):
             for j in range(self.n_independent_var):
                 self.a[i][j].start = bn.a[j]
@@ -353,8 +354,8 @@ if __name__ == '__main__':
     preprocessing.normalize(df, norm_cols=norm_cols)
 
     # Parameters:
-    tree_complexity = 2
-    tree_depth = 3
+    tree_complexity = 1
+    tree_depth = 2
     df_train, df_test = preprocessing.train_test_split(df, split=0.8)
     print('Training samples: {0}'.format(len(df_train)))
     print('Testing samples: {0}'.format(len(df_test)))
