@@ -1,7 +1,7 @@
 import math
 import pandas as pd
-import oct_prototype.preprocessing as preprocessing
-from octh_prototype.octh import OCTH
+import preprocessing as preprocessing
+from octh import OCTH
 
 
 class BranchNode:

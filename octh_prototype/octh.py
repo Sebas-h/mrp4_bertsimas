@@ -1,10 +1,12 @@
 import gurobipy
 from os import cpu_count
+import os
+os.sys.path.append('../oct_prototype/')
 import operator
 import pandas as pd
 import numpy as np
-from octh_prototype.binary_tree import BinClassificationTree
-import oct_prototype.preprocessing as preprocessing
+from binary_tree import BinClassificationTree
+import preprocessing as preprocessing
 
 """
 Gurobi workflow:
@@ -25,14 +27,19 @@ class OCTH:
         target = column name of target variable (string)
         """
         self.model = gurobipy.Model()
-
+        
+        self.target_var = None
         self.data = data
+        #print('Target:', target)
         if isinstance(target, str):
             self.target_var = target
-        if isinstance(target, int):
+        #if isinstance(target, int): does not work when calling from run.py ?!
+        else:
+            #print('setting target_var')
             self.target_var = self.data.columns[target]
-        self.not_target_cols = [
-            col for col in self.data.columns if not col == self.target_var]
+        print(self.target_var)
+        
+        self.not_target_cols = [col for col in self.data.columns if not col==self.target_var]
 
         # Hyperparameters
         self.tree_complexity = tree_complexity
@@ -276,7 +283,7 @@ class OCTH:
             )
         )
 
-    def fit(self, time_limit=300, gurobi_print_output=True):
+    def fit(self, time_limit=300, gurobi_print_output=True, threads = cpu_count()):
         """
         time_limit: maximum time in seconds for running gurobi optimization
         threads: how many threads to use, if set to None, gurobi default
@@ -284,7 +291,7 @@ class OCTH:
         if not gurobi_print_output:
             self.model.setParam('OutputFlag', 0)
         self.model.Params.timeLimit = time_limit
-        self.model.Params.Threads = cpu_count()
+        self.model.Params.Threads = threads
         # TODO: add stop criterion: if gap hadn't changed for x seconds, then abort
         self.model.optimize()
         self.create_tree()  # create classification tree
@@ -316,7 +323,7 @@ class OCTH:
             (np.unique(self.data.groupby(by=self.target_var).count().iloc[:, :].values)[-1])) / self.n_data_points
 
     def warm_start(self):
-        from octh_prototype.warm_start import BinTree
+        from warm_start import BinTree
         bt = BinTree(self.data.iloc[:, :-1], self.target_var, self.n_independent_var, self.n_data_points,
                      self.n_classes,
                      self.class_to_number, self.tree_complexity, self.tree_depth - 1)
