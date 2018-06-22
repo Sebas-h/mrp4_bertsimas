@@ -320,11 +320,11 @@ class OCTH:
 
     def warm_start(self):
         from octh_prototype.warm_start import BinTree
-
         bt = BinTree(self.deep_copy_data, self.target_var, self.n_independent_var, self.n_data_points, self.n_classes,
                      self.class_to_number, self.tree_complexity, self.tree_depth - 1)
         bt.rec_greedy_octh(1, [x for x in range(self.deep_copy_data.shape[0])])
 
+        # TODO: check if the nodes are in the same order in both lists
         for i, bn in enumerate(bt.branch_nodes):
             for j in range(self.n_independent_var):
                 self.a[i][j].start = bn.a[j]
@@ -334,17 +334,13 @@ class OCTH:
             self.d[i].start = bn.d
 
         for i, ln in enumerate(bt.leaf_nodes):
-            self.l[i].start = ln.l
-
+            self.l[i].start = ln.L
             for j in range(int(self.n_data_points)):
                 self.z[i][j].start = ln.z[j]
-
             self.N_t[i].start = ln.n_t
-
             for j in range(int(self.n_classes)):
                 self.N_k_t[i][j].start = ln.n_k_t[j]
                 self.c_k_t[i][j].start = ln.c_k_t[j]
-
             self.L_t[i].start = ln.l_t
 
 
@@ -358,7 +354,7 @@ if __name__ == '__main__':
 
     # Parameters:
     tree_complexity = 2
-    tree_depth = 2
+    tree_depth = 3
     df_train, df_test = preprocessing.train_test_split(df, split=0.8)
     print('Training samples: {0}'.format(len(df_train)))
     print('Testing samples: {0}'.format(len(df_test)))
