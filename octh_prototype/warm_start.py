@@ -163,11 +163,13 @@ class BinTree:
 
             for i in branch_node_ids:
                 bn = BranchNode()
-                self.add_branch_node(bn.empty_node(i, self.num_features))
+                bn.empty_node(i, self.num_features)
+                self.add_branch_node(bn)
 
             for i in leaf_node_ids:
                 ln = LeafNode()
-                self.add_leaf_node(ln.empty_node(i, self.num_classes, self.num_datapoints))
+                ln.empty_node(i, self.num_classes, self.num_datapoints)
+                self.add_leaf_node(ln)
 
             ln_right_most = LeafNode()
             ln_right_most.create(o, 3, data_df_indices, self.num_datapoints, self.class_to_number)
@@ -179,14 +181,15 @@ class BinTree:
 
         # Make branch node
         bn = BranchNode()
-        self.add_branch_node(bn.create(o, node_id, data_df_indices, self.num_features))
+        bn.create(o, node_id, data_df_indices, self.num_features)
+        self.add_branch_node(bn)
 
         # Current node has leaf nodes as child nodes; make the leaf nodes; stop recursion
         if has_leafs:
             for t in (2, 3):
                 ln = LeafNode()
-                self.add_leaf_node(
-                    ln.create(o, (node_id * 2) + (t - 2), data_df_indices, self.num_datapoints, self.class_to_number))
+                ln.create(o, (node_id * 2) + (t - 2), data_df_indices, self.num_datapoints, self.class_to_number)
+                self.add_leaf_node(ln)
             return
 
         # Recurse down the tree
