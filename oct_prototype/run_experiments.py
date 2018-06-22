@@ -239,9 +239,9 @@ def gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_r
 def hyperparameter_tuning(method, train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat, warm_start):
     
     if method=='auto' or method=='gradient_descent':
-        results_df, aggregated, best_alpha = gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=val_repeat, warm_start=warm_start)
+        results_df, aggregated, best_alpha = gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=val_repeat, warm_start=warm_start, max_time_per_run=max_time_per_run)
     if method=='bo':
-        results_df, aggregated, best_alpha = bayesian_tuning(train_val_df=train_val_df, train_val_ratio=train_val_ratio, tree_depths=tree_depths, target_col_name=target_col_name, print_status=print_status, val_repeat=val_repeat, warm_start=warm_start)
+        results_df, aggregated, best_alpha = bayesian_tuning(train_val_df=train_val_df, train_val_ratio=train_val_ratio, tree_depths=tree_depths, target_col_name=target_col_name, print_status=print_status, val_repeat=val_repeat, warm_start=warm_start, max_time_per_run=max_time_per_run)
         
     return results_df, aggregated, best_alpha
 
@@ -342,27 +342,27 @@ def is_url(string):
 if __name__=='__main__':
     #target_col = 4#iris
     warm_start = True
-    #target_col=9#fertility diagnosis
-    target_col=0 #balance-scale
+    target_col=9#fertility diagnosis
+    #target_col=0 #balance-scale
     train_test_ratio = 0.75
     train_val_ratio = 0.66
     tree_depths=[4] #TODO: CURRENTLY ONLY ONE TREE DEPTH AT A TIME WORKS CORECTLY!!!
     #alpha_tuning='auto'
     alpha_tuning = 'bo' #bayesian optimization
     repeat = 5
-    val_repeat=5 #how many times should a validation experiment be repeated (average over all runs is final validation)
+    val_repeat=3 #how many times should a validation experiment be repeated (average over all runs is final validation)
     threads = 10
-    max_time_per_run = 600 #seconds
+    max_time_per_run = 1800 #seconds
     #loc='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
-    #loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
-    loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data'
+    loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
+    #loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data'
     #loc = 'data/forecast/forecast.data'
-    f_name = 'balance_scale'
+    #f_name = 'balance_scale'
     #f_name = 'iris'
     #f_name = 'forecast'
     hot_encode_cols = None #iris, fertility
     #hot_encode_cols = ['outlook','temperature','humidity','windy']
-    #f_name = 'fertility_diagnosis'
+    f_name = 'fertility_diagnosis'
     f_name+='_'+alpha_tuning
     print_status = True
     for r in range(repeat):
