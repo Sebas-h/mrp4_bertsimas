@@ -45,8 +45,8 @@ def boolean_to_numerical(df, bool_type='bool'):
     for c in bool_cols:
         df[c] = df[c].astype(int)
 
-def train_test_split(df, split=0.8):
-    train=df.sample(frac=split)
+def train_test_split(df, split=0.8, random_state=None):
+    train=df.sample(frac=split, random_state=random_state)
     test=df.drop(train.index)
     
     return train, test

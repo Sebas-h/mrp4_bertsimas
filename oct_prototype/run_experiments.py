@@ -132,12 +132,17 @@ def bayesian_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name,
     all_results_df = []
     all_aggregated_df = []
     
+    train_df, val_df = preprocessing.train_test_split(train_val_df, split=train_val_ratio)
+    if val_repeat==1:
+        random_state = 42
+    else:
+        random_state = None
     def oct_target(alpha):
         print('Solving ILP for hyperparameter tuning...')
         all_results = []
         tree_depth = tree_depths[0]
         for r in range(val_repeat):
-            train_df, val_df = preprocessing.train_test_split(train_val_df, split=train_val_ratio)
+            train_df, val_df = preprocessing.train_test_split(train_val_df, split=train_val_ratio, random_state=random_state)
             preprocessing.normalize(train_df, norm_cols=norm_cols)
             preprocessing.normalize(val_df, norm_cols=norm_cols)
             all_results.append(get_results(train_df=train_df,
@@ -342,27 +347,27 @@ def is_url(string):
 if __name__=='__main__':
     #target_col = 4#iris
     warm_start = True
-    target_col=9#fertility diagnosis
-    #target_col=0 #balance-scale
+    #target_col=9#fertility diagnosis
+    target_col=0 #balance-scale
     train_test_ratio = 0.75
     train_val_ratio = 0.66
-    tree_depths=[4] #TODO: CURRENTLY ONLY ONE TREE DEPTH AT A TIME WORKS CORECTLY!!!
+    tree_depths=[2] #TODO: CURRENTLY ONLY ONE TREE DEPTH AT A TIME WORKS CORECTLY!!!
     #alpha_tuning='auto'
     alpha_tuning = 'bo' #bayesian optimization
     repeat = 5
-    val_repeat=3 #how many times should a validation experiment be repeated (average over all runs is final validation)
+    val_repeat=1 #how many times should a validation experiment be repeated (average over all runs is final validation)
     threads = 10
     max_time_per_run = 1800 #seconds
     #loc='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
-    loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
-    #loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data'
+    #loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
+    loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data'
     #loc = 'data/forecast/forecast.data'
-    #f_name = 'balance_scale'
+    f_name = 'balance_scale'
     #f_name = 'iris'
     #f_name = 'forecast'
     hot_encode_cols = None #iris, fertility
     #hot_encode_cols = ['outlook','temperature','humidity','windy']
-    f_name = 'fertility_diagnosis'
+    #f_name = 'fertility_diagnosis'
     f_name+='_'+alpha_tuning
     print_status = True
     for r in range(repeat):

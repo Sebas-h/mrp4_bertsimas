@@ -238,12 +238,12 @@ def gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_r
 
 
 
-def hyperparameter_tuning(method, train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat, warm_start):
+def hyperparameter_tuning(method, train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat, warm_start, max_time_per_run):
     
     if method=='auto' or method=='gradient_descent':
-        results_df, aggregated, best_alpha = gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=val_repeat, warm_start=warm_start)
+        results_df, aggregated, best_alpha = gd_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name, val_repeat=val_repeat, warm_start=warm_start, max_time_per_run=max_time_per_run)
     if method=='bo':
-        results_df, aggregated, best_alpha = bayesian_tuning(train_val_df=train_val_df, train_val_ratio=train_val_ratio, tree_depths=tree_depths, target_col_name=target_col_name, print_status=print_status, val_repeat=val_repeat, warm_start=warm_start)
+        results_df, aggregated, best_alpha = bayesian_tuning(train_val_df=train_val_df, train_val_ratio=train_val_ratio, tree_depths=tree_depths, target_col_name=target_col_name, print_status=print_status, val_repeat=val_repeat, warm_start=warm_start, max_time_per_run=max_time_per_run)
         
     return results_df, aggregated, best_alpha
 
@@ -291,7 +291,7 @@ def uci_experiment(loc, target_col, hot_encode_cols, tree_depths, alphas_tuning,
     
     #all_results = [] #all (repeat) experimental results for different values of alpha, tree depths
     
-    results_df, aggregated, best_alpha = hyperparameter_tuning(method=alphas_tuning, train_val_df=train_val_df, train_val_ratio=train_val_ratio, tree_depths=tree_depths, target_col_name=target_col_name, val_repeat=val_repeat, warm_start=warm_start)
+    results_df, aggregated, best_alpha = hyperparameter_tuning(method=alphas_tuning, train_val_df=train_val_df, train_val_ratio=train_val_ratio, tree_depths=tree_depths, target_col_name=target_col_name, val_repeat=val_repeat, warm_start=warm_start, max_time_per_run=max_time_per_run)
     
     print('Validation done. Best alpha: {0}'.format(best_alpha))
     
