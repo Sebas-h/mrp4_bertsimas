@@ -134,7 +134,7 @@ def bayesian_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name,
     
     train_df, val_df = preprocessing.train_test_split(train_val_df, split=train_val_ratio)
     if val_repeat==1:
-        random_state = 42
+        random_state = np.random.randint(low=0, high=100)
     else:
         random_state = None
     def oct_target(alpha):
@@ -161,16 +161,23 @@ def bayesian_tuning(train_val_df, train_val_ratio, tree_depths, target_col_name,
         best_alpha_acc = aggregated.max()['testing_accuracy']
         return best_alpha_acc
     
-    alpha_min = 0
+    alpha_min = 0.5
     train_df, val_df = preprocessing.train_test_split(train_val_df, split=train_val_ratio) # need to split for an initial guess on max alpha
     l_hat, mis_points = baseline_accuracy(train_df, target_col_name)
     alpha_max = mis_points/l_hat
-    
+    max_splits = np.power(tree_depths[0], 2)-1
+    alpha_max = alpha_max*((max_splits-1)/max_splits)
+    alpha_min = alpha_max*((1.0)/max_splits)
     bo = BayesianOptimization(oct_target, {'alpha': (alpha_min, alpha_max)})
-    n_iter = int(alpha_max*(2/15))+1
-    if n_iter<5:
-        n_iter = 10
-    bo.maximize(init_points=2, n_iter=n_iter, kappa=2)
+    n_iter = int((alpha_max-alpha_min)*(1/15))
+    #n_iter = 5
+    if n_iter<4:
+        n_iter = 4
+    if tree_depths[0]>2:
+        if n_iter>max_splits:
+            n_iter = max_splits
+    print('***\nAlpha min: {0}\nAlpha max: {1}\nTesting {2} values for alpha\n***'.format(alpha_min, alpha_max, n_iter))
+    bo.maximize(init_points=2, n_iter=n_iter, kappa=3)
     
     
     return pd.concat(all_results_df), pd.concat(all_aggregated_df), bo.res['max']['max_params']['alpha']
@@ -351,13 +358,13 @@ if __name__=='__main__':
     target_col=0 #balance-scale
     train_test_ratio = 0.75
     train_val_ratio = 0.66
-    tree_depths=[2] #TODO: CURRENTLY ONLY ONE TREE DEPTH AT A TIME WORKS CORECTLY!!!
+    tree_depths=[3] #TODO: CURRENTLY ONLY ONE TREE DEPTH AT A TIME WORKS CORECTLY!!!
     #alpha_tuning='auto'
     alpha_tuning = 'bo' #bayesian optimization
     repeat = 5
     val_repeat=1 #how many times should a validation experiment be repeated (average over all runs is final validation)
     threads = 10
-    max_time_per_run = 1800 #seconds
+    max_time_per_run = 600 #seconds
     #loc='http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data' #iris
     #loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
     loc = 'https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data'
